@@ -1,5 +1,7 @@
 import express, { Request, Response } from "express";
 import dotenv from "dotenv";
+import helmet from "helmet";
+
 import exampleRouter from "./routes/example";
 
 dotenv.config();
@@ -9,7 +11,7 @@ const PORT = process.env.PORT || 3000;
 app.use(express.json());
 app.use("/api/example", exampleRouter);
 
-app.get("/", (req: Request, res: Response) => {
+app.get("/", (_req: Request, res: Response) => {
   res.send("Welcome to Express with TypeScript!");
 });
 
