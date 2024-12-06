@@ -1,9 +1,9 @@
-import { Router, Request, Response } from "express";
+import { Router, Request, Response } from 'express'
 
-const router = Router();
+const router: Router = Router()
 
-router.get("/", (req: Request, res: Response) => {
-  res.send("This is an example API endpoint");
-});
+router.get('/', (_req: Request, res: Response) => {
+   res.send('This is an example API endpoint')
+})
 
-export default router;
+export default router

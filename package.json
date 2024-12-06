@@ -1,37 +1,42 @@
 {
-  "name": "cre8ify-backend",
-  "version": "1.0.0",
-  "description": "Express app for Cre8ify",
-  "main": "index.js",
-  "type": "module",
-  "scripts": {
-    "start": "node dist/index.js",
-    "dev": "nodemon",
-    "clean": "rimraf dist",
-    "build": "pnpm run clean && tsc",
-    "lint": "eslint ./src/**/*.ts"
-  },
-  "keywords": [],
-  "author": "Abdulhamid Alsaati",
-  "license": "ISC",
-  "dependencies": {
-    "bcryptjs": "^2.4.3",
-    "cors": "^2.8.5",
-    "dotenv": "^16.4.7",
-    "express": "^4.21.2",
-    "express-async-errors": "^3.1.1",
-    "helmet": "^8.0.0",
-    "zod": "^3.23.8"
-  },
-  "devDependencies": {
-    "@types/express": "^5.0.0",
-    "@types/node": "^22.10.1",
-    "@typescript-eslint/eslint-plugin": "^8.17.0",
-    "@typescript-eslint/parser": "^8.17.0",
-    "eslint": "^9.16.0",
-    "nodemon": "^3.1.7",
-    "rimraf": "^6.0.1",
-    "ts-node": "^10.9.2",
-    "typescript": "^5.7.2"
-  }
+   "name": "cre8ify-backend",
+   "version": "1.0.0",
+   "description": "Express app for Cre8ify",
+   "main": "index.js",
+   "type": "module",
+   "scripts": {
+      "start": "node dist/index.js",
+      "dev": "nodemon",
+      "clean": "rimraf dist",
+      "build": "pnpm run clean && tsc",
+      "lint": "eslint ./src/**/*.ts"
+   },
+   "keywords": [],
+   "author": "Abdulhamid Alsaati",
+   "license": "ISC",
+   "dependencies": {
+      "bcryptjs": "^2.4.3",
+      "cors": "^2.8.5",
+      "dotenv": "^16.4.7",
+      "express": "^4.21.2",
+      "express-async-errors": "^3.1.1",
+      "express-rate-limit": "^7.4.1",
+      "helmet": "^8.0.0",
+      "zod": "^3.23.8"
+   },
+   "devDependencies": {
+      "@types/cookie-parser": "^1.4.8",
+      "@types/express": "^5.0.0",
+      "@types/express-rate-limit": "^6.0.2",
+      "@types/morgan": "^1.9.9",
+      "@types/node": "^22.10.1",
+      "@typescript-eslint/eslint-plugin": "^8.17.0",
+      "@typescript-eslint/parser": "^8.17.0",
+      "eslint": "^9.16.0",
+      "nodemon": "^3.1.7",
+      "prettier": "^3.4.2",
+      "rimraf": "^6.0.1",
+      "ts-node": "^10.9.2",
+      "typescript": "^5.7.2"
+   }
 }
