@@ -1,0 +1,27 @@
+{
+  "name": "cre8ify-backend",
+  "version": "1.0.0",
+  "description": "Express app for Cre8ify",
+  "main": "index.js",
+  "scripts": {
+    "start": "node dist/index.js",
+    "dev": "nodemon",
+    "clean": "rimraf dist",
+    "build": "pnpm run clean && tsc"
+  },
+  "keywords": [],
+  "author": "Abdulhamid Alsaati",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.0",
+    "@types/node": "^22.10.1",
+    "nodemon": "^3.1.7",
+    "rimraf": "^6.0.1",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.7.2"
+  }
+}
