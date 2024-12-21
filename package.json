@@ -13,11 +13,19 @@
   "author": "Abdulhamid Alsaati",
   "license": "ISC",
   "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
     "dotenv": "^16.4.7",
-    "express": "^4.21.2"
+    "express": "^4.21.2",
+    "express-async-errors": "^3.1.1",
+    "express-list-routes": "^1.2.4",
+    "helmet": "^8.0.0",
+    "mongoose": "^8.9.2",
+    "zod": "^3.23.8"
   },
   "devDependencies": {
     "@types/express": "^5.0.0",
+    "@types/mongoose": "^5.11.97",
     "@types/node": "^22.10.1",
     "nodemon": "^3.1.7",
     "rimraf": "^6.0.1",
