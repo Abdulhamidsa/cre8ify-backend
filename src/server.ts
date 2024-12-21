@@ -30,7 +30,7 @@ app.use(express.json());
 
 // Routes
 app.get("/", (_req: Request, res: Response) => {
-  res.send("Welcome to Express with TypeScript!");
+  res.send("Welcome to Express with TypeScript wooohaaa!");
 });
 app.use("/api/example", exampleRouter);
 app.use("/api/users", userRouter);
