@@ -20,6 +20,6 @@
     "experimentalDecorators": true, // Enable support for decorators
     "emitDecoratorMetadata": true // Emit metadata for decorators (useful for DI frameworks)
   },
-  "include": ["src/**/*"], // Include all source files in `src/`
+  "include": ["src/*"], // Include all source files in `src/`
   "exclude": ["node_modules", "dist"] // Exclude `node_modules` and output directory
 }
