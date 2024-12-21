@@ -1,7 +1,7 @@
 import { RequestHandler } from "express";
 import { getAllUsersService } from "../services/user.service";
 import { getSuccessResponse } from "../../../common/utils/response.handler";
-import { getUserProfileService } from "../services/user.profile.service";
+// import { getUserProfileService } from "../services/user.profile.service";
 import { editUserProfileService } from "../services/user.edit.service";
 
 // handler to fetching all users
@@ -14,15 +14,15 @@ export const handleFetchAllUsers: RequestHandler = async (_req, res, next) => {
   }
 };
 // fetch user profile
-export const handleFetchUserProfile: RequestHandler = async (req, res, next) => {
-  const userId = req.params.userid;
-  try {
-    const user = await getUserProfileService(userId);
-    res.json(getSuccessResponse(user));
-  } catch (error) {
-    next(error);
-  }
-};
+// export const handleFetchUserProfile: RequestHandler = async (req, res, next) => {
+//   const userId = req.params.userid;
+//   try {
+//     const user = await getUserProfileService(userId);
+//     res.json(getSuccessResponse(user));
+//   } catch (error) {
+//     next(error);
+//   }
+// };
 // edit user profile
 export const handleEditUserProfile: RequestHandler = async (req, res, next) => {
   const userId = req.params.userId;

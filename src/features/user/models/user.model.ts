@@ -84,3 +84,20 @@ const UserSchema: Schema<IUser> = new Schema(
   { timestamps: true }
 );
 export const User: Model<IUser> = mongoose.model<IUser>("User", UserSchema);
+
+interface IUsers extends Document {
+  mongo_ref: string;
+  name: string;
+  email: string;
+  age: number;
+}
+
+const UserSchemas: Schema = new Schema({
+  mongo_ref: { type: String, unique: true },
+  email: { type: String, unique: true },
+  name: { type: String },
+  age: { type: Number },
+});
+
+const Users = mongoose.model<IUsers>("Users", UserSchemas);
+export default Users;

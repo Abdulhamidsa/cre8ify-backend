@@ -8,6 +8,8 @@ import { SECRETS } from "./common/config/config";
 // import { rateLimit } from "express-rate-limit";
 import userRouter from "./features/user/routes/user.route";
 import expressListRoutes from "express-list-routes";
+import { AppError } from "./common/errors/app.error";
+import { getErrorMessage } from "./common/utils/error.utils";
 // import projectRouter from "./features/project/routes/project.route";
 const app = express();
 // const limiter = rateLimit({
@@ -40,16 +42,12 @@ export const start = async (): Promise<void> => {
     await connectMongoDB();
     app.listen(PORT, () => {
       console.log(`Server running at http://localhost:${PORT}`);
-      console.log("MongoDB connected");
       console.log("Available APIs:");
-      expressListRoutes(app);
+      expressListRoutes(app); // Assuming this lists all registered routes
     });
   } catch (error) {
-    if (error instanceof Error) {
-      console.error("Failed to start server:", error.message);
-    } else {
-      console.error("Failed to start server:", error);
-    }
+    console.error("Failed to start the application:", error); // Log the full error
+    new AppError(getErrorMessage(error), 500); // Wrap the error (if needed for further handling)
     process.exit(1);
   }
 };

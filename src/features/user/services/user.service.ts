@@ -1,4 +1,4 @@
-import { User } from "../models/user.model";
+import User from "../models/user.model";
 import { AppError } from "../../../common/errors/app.error";
 import { IUser } from "../../../common/types/user.types";
 

@@ -3,6 +3,7 @@ config();
 
 export const SECRETS = {
   mongoConnectionString: process.env.MONGO_CONNECTION_STRING || "",
+  postgresConnectionString: process.env.POSTGRES_CONNECTION_STRING || "",
   nodeEnv: process.env.NODE_ENV || "development",
   port: process.env.PORT ? parseInt(process.env.PORT) : 4000,
   jwtSecret: process.env.JWT_SECRET || "",
