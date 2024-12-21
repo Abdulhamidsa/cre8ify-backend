@@ -5,7 +5,7 @@ import { getUserProfileService } from "../services/user.profile.service";
 import { editUserProfileService } from "../services/user.edit.service";
 
 // handler to fetching all users
-export const handleFetchAllUsers: RequestHandler = async (req, res, next) => {
+export const handleFetchAllUsers: RequestHandler = async (_req, res, next) => {
   try {
     const users = await getAllUsersService();
     res.status(200).json(getSuccessResponse(users));

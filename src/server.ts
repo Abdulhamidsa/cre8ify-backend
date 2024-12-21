@@ -27,7 +27,7 @@ const PORT = SECRETS.port || 3000;
 app.use(express.json());
 
 // Routes
-app.get("/", (req: Request, res: Response) => {
+app.get("/", (_req: Request, res: Response) => {
   res.send("Welcome to Express with TypeScript!");
 });
 app.use("/api/example", exampleRouter);
