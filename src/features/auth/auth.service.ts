@@ -1,52 +1,42 @@
-import bcrypt from "bcrypt";
 import { getSQLClient } from "../../common/config/sql-client";
-import UserSchema from "../../features/user/models/user.model";
 import { AppError } from "../../common/errors/app.error";
-import { getErrorMessage } from "../../common/utils/error.utils";
+import Logger from "../../common/utils/logger";
+import { SQL_QUERIES } from "../../common/utils/sql.constants";
+import { hashPassword, generateMongoRef } from "../../common/utils/helpers";
+import { saveDocument } from "../../common/utils/mongo.service";
+import Users from "../../features/user/models/user.model";
+import { SignUpInput, SignUpResponse } from "../../common/types/types";
 
-export const signUpUser = async (email: string, password: string, name: string, age: number) => {
-  const client = await getSQLClient(); // Lazy connection to SQL
+export const signUpUser = async (input: SignUpInput): Promise<SignUpResponse> => {
+  const { email, password, name, age } = input;
+  const sqlClient = await getSQLClient();
+
   try {
-    // Check if the email already exists
-    const checkQuery = `SELECT id FROM users WHERE email = $1;`;
-    const existingUser = await client.query(checkQuery, [email]);
-
+    const existingUser = await sqlClient.query(SQL_QUERIES.checkUserExists, [email]);
     if (existingUser.rows.length > 0) {
-      throw new AppError("Email already exists", 400);
+      return { success: false, message: "Email already exists" };
     }
 
-    // Hash the password
-    const saltRounds = 10;
-    const hashedPassword = await bcrypt.hash(password, saltRounds);
+    const hashedPassword = await hashPassword(password);
+    const mongoRef = generateMongoRef();
 
-    // Generate a random MongoDB reference
-    const mongoRef = Math.random().toString(36).substring(2, 15);
+    const sqlResult = await sqlClient.query(SQL_QUERIES.insertUser, [email, hashedPassword, mongoRef]);
+    const userId = sqlResult.rows[0].id;
 
-    // Insert user into SQL
-    const sqlQuery = `
-      INSERT INTO users (email, password_hash, mongo_ref)
-      VALUES ($1, $2, $3) RETURNING id;
-    `;
-    const result = await client.query(sqlQuery, [email, hashedPassword, mongoRef]);
-    const userId = result.rows[0].id;
-
-    // Insert user profile into MongoDB
-    const userProfile = new UserSchema({
-      mongo_ref: mongoRef,
-      name,
-      age,
-    });
-    await userProfile.save();
-
-    return { message: "User registered successfully!", userId };
-  } catch (error: any) {
-    if (error.code === "23505") {
-      console.error("Duplicate email error:", error.detail);
-      throw new AppError("Email already exists", 400);
+    try {
+      await saveDocument(Users, { mongo_ref: mongoRef, email, name, age });
+      Logger.info(`User successfully registered with ID: ${userId}`);
+      return { success: true, data: { id: userId, email, name, age } };
+    } catch (mongoError) {
+      await sqlClient.query(SQL_QUERIES.rollbackUser, [userId]); // Rollback
+      Logger.error("Failed to save user profile in MongoDB:", (mongoError as Error).message);
+      const errorMessage = (mongoError as Error).message;
+      throw new AppError(`Failed to save user profile in MongoDB: ${errorMessage}`, 500);
     }
-    console.error("Error during signup:", error);
-    throw new AppError(getErrorMessage(error), 500);
+  } catch (error) {
+    throw error instanceof AppError ? error : new AppError("User registration failed", 500);
   } finally {
-    client.release(); // Release the SQL client back to the pool
+    sqlClient.release();
+    Logger.info("SQL client released after user registration");
   }
 };
