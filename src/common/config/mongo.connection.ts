@@ -13,8 +13,6 @@ export const connectMongoDB = async () => {
   } catch (error) {
     const errorMessage = getErrorMessage(error);
     Logger.error(`MongoDB connection failed: ${errorMessage}`);
-    throw new AppError("Database connection error", 500, {
-      details: errorMessage,
-    });
+    throw new AppError("Database connection error", 500);
   }
 };
