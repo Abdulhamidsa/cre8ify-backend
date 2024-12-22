@@ -1,11 +1,10 @@
-import { Model } from "mongoose";
+import { Model, Document } from "mongoose";
 
 /**
  * Generic MongoDB service to save a document.
  * @param model - The Mongoose model to use.
  * @param data - The data to save.
  */
-import { Model, Document } from "mongoose";
 
 /**
  * Generic MongoDB service to save a document.
@@ -14,6 +13,7 @@ import { Model, Document } from "mongoose";
  */
 export const saveDocument = async <T extends Document>(model: Model<T>, data: Partial<T>): Promise<T> => {
   const document = new model(data);
+
   return await document.save();
 };
 
