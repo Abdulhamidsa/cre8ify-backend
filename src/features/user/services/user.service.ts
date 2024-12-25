@@ -1,13 +1,21 @@
-import User from "../models/user.model";
-import { AppError } from "../../../common/errors/app.error";
-import { IUser } from "../../../common/types/user.types";
+import { AppError } from '../../../common/errors/app.error';
+import { User } from '../../../common/types/user.types';
+import Logger from '../../../common/utils/logger';
+import Users from '../models/user.model';
 
-// Service to fetch all users
-export const getAllUsersService = async (): Promise<IUser[]> => {
+export const getAllUsersService = async (): Promise<User[]> => {
   try {
-    const users = await User.find({}).select("-_id -__v -active -updatedAt -deletedAt -userRole -approved").lean<IUser[]>(); // Using lean for better performance and type inference
+    const users = await Users.find({})
+      .select('-_id -__v -active -updatedAt -deletedAt -userRole -approved createdAt')
+      .lean<User[]>();
+
+    if (!users.length) {
+      throw new AppError('No users found', 404);
+    }
+
     return users;
-  } catch (error: any) {
-    throw new AppError(error.message || "Error fetching all users", error.status || 500);
+  } catch (error) {
+    Logger.error('Error fetching users:', error);
+    throw new AppError('An unexpected error occurred while fetching users', 500);
   }
 };
