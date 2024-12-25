@@ -1,4 +1,4 @@
-import { Model, Document } from "mongoose";
+import { Document, Model } from 'mongoose';
 
 /**
  * Generic MongoDB service to save a document.
@@ -32,6 +32,10 @@ export const findDocument = async <T>(model: Model<T>, criteria: Partial<T>): Pr
  * @param criteria - The criteria to find the document.
  * @param updateData - The data to update.
  */
-export const updateDocument = async <T>(model: Model<T>, criteria: Partial<T>, updateData: Partial<T>): Promise<T | null> => {
+export const updateDocument = async <T>(
+  model: Model<T>,
+  criteria: Partial<T>,
+  updateData: Partial<T>,
+): Promise<T | null> => {
   return await model.findOneAndUpdate(criteria, updateData, { new: true });
 };
