@@ -31,8 +31,6 @@ app.use(express.json());
 app.get('/', (_req: Request, res: Response) => {
   res.send('Welcome to Express with TypeScript!');
 });
-// app.use("/api/example", exampleRouter);
-// app.use("/api/users", userRouter);
 app.use('/api', routes);
 
 // Error handling middleware
@@ -47,7 +45,7 @@ export const start = async (): Promise<void> => {
       Logger.info(`Server running at http://localhost:${PORT}`);
     });
   } catch (error) {
-    Logger.error('Error starting server:');
+    Logger.error(error);
     process.exit(1);
   }
 };
