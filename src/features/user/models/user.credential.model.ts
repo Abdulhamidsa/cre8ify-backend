@@ -1,5 +1,7 @@
-import mongoose, { Schema, Model } from "mongoose";
-import { IUserCredential } from "../../../common/types/user.types";
+import mongoose, { Model, Schema } from 'mongoose';
+
+import { IUserCredential } from '../../../common/types/user.types';
+
 const userCredentialSchema: Schema<IUserCredential> = new Schema({
   email: {
     type: String,
@@ -11,4 +13,4 @@ const userCredentialSchema: Schema<IUserCredential> = new Schema({
     trim: true,
   },
 });
-export const Credential: Model<IUserCredential> = mongoose.model<IUserCredential>("Credential", userCredentialSchema);
+export const Credential: Model<IUserCredential> = mongoose.model<IUserCredential>('Credential', userCredentialSchema);
