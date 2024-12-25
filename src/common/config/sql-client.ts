@@ -2,15 +2,12 @@
 // import { SECRETS } from "./config";
 // import { AppError } from "../errors/app.error";
 // import { getErrorMessage } from "../utils/error.utils";
-
 // const pool = new Pool({
 //   connectionString: SECRETS.postgresConnectionString,
-
 //   ssl: {
 //     rejectUnauthorized: false, // Required for some hosted services like Railway
 //   },
 // });
-
 // export const connectPostgres = async (): Promise<void> => {
 //   try {
 //     await pool.connect();
@@ -19,12 +16,12 @@
 //     new AppError(getErrorMessage(error), 500);
 //   }
 // };
-
 // export default pool;
-import { Pool, PoolClient } from "pg";
-import { SECRETS } from "./config";
-import { AppError } from "../errors/app.error";
-import { getErrorMessage } from "../utils/error.utils";
+import { Pool, PoolClient } from 'pg';
+
+import { AppError } from '../errors/app.error';
+import { getErrorMessage } from '../utils/error.utils';
+import { SECRETS } from './config';
 
 // Create a pool but do not connect at startup
 const pool = new Pool({
