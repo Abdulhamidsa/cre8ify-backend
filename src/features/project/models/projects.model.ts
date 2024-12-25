@@ -1,4 +1,4 @@
-import mongoose, { Schema, Model } from "mongoose";
+import mongoose, { Model, Schema } from 'mongoose';
 
 interface IProjectImage {
   _id: any;
@@ -21,7 +21,7 @@ const projectSchema: Schema<ProjectSchema> = new Schema(
   {
     userId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
+      ref: 'User',
       required: true,
     },
     title: {
@@ -50,11 +50,11 @@ const projectSchema: Schema<ProjectSchema> = new Schema(
     tags: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Tag",
+        ref: 'Tag',
       },
     ],
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
-export const Project: Model<ProjectSchema> = mongoose.model<ProjectSchema>("Project", projectSchema);
+export const Project: Model<ProjectSchema> = mongoose.model<ProjectSchema>('Project', projectSchema);
