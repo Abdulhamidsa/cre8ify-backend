@@ -1,13 +1,14 @@
-import express, { Request, Response } from "express";
-import exampleRouter from "./routes/example";
-import { connectMongoDB } from "./common/config/mongo.connection";
-import { SECRETS } from "./common/config/config";
-import cookieParser from "cookie-parser";
-import bodyParser from "body-parser";
-import { rateLimit } from "express-rate-limit";
-import userRouter from "./features/user/routes/user.route";
-import expressErrorMiddleware from "./common/middleware/error.middleware";
-import Logger from "./common/utils/logger";
+import bodyParser from 'body-parser';
+import cookieParser from 'cookie-parser';
+import express, { Request, Response } from 'express';
+import { rateLimit } from 'express-rate-limit';
+
+import { SECRETS } from './common/config/config';
+import { connectMongoDB } from './common/config/mongo.connection';
+import { getSQLClient } from './common/config/sql-client';
+import expressErrorMiddleware from './common/middleware/error.middleware';
+import Logger from './common/utils/logger';
+import routes from './routes';
 
 const app = express();
 const PORT = SECRETS.port;
@@ -27,11 +28,12 @@ app.use(limiter);
 app.use(express.json());
 
 // Routes
-app.get("/", (_req: Request, res: Response) => {
-  res.send("Welcome to Express with TypeScript!");
+app.get('/', (_req: Request, res: Response) => {
+  res.send('Welcome to Express with TypeScript!');
 });
-app.use("/api/example", exampleRouter);
-app.use("/api/users", userRouter);
+// app.use("/api/example", exampleRouter);
+// app.use("/api/users", userRouter);
+app.use('/api', routes);
 
 // Error handling middleware
 app.use(expressErrorMiddleware);
@@ -39,12 +41,13 @@ app.use(expressErrorMiddleware);
 // Start function
 export const start = async (): Promise<void> => {
   try {
-    await connectMongoDB();
+    await Promise.all([getSQLClient(), connectMongoDB()]);
+    Logger.info('Connected to SQL and MongoDB');
     app.listen(PORT, () => {
       Logger.info(`Server running at http://localhost:${PORT}`);
     });
   } catch (error) {
-    Logger.error("Error starting server:");
+    Logger.error('Error starting server:');
     process.exit(1);
   }
 };
