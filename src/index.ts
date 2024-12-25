@@ -1,4 +1,5 @@
-import { start } from "./server";
+import { start } from './server';
+
 start();
 
 // import express, { Request, Response } from "express";
