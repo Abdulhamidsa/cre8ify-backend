@@ -1,13 +1,13 @@
 // import mongoose from "mongoose";
-import Links from "../data/constants/links";
-import Professions from "../data/constants/proffesions";
+import Links from '../data/constants/links';
+import Professions from '../data/constants/proffesions';
 
 type ILink = {
   name: keyof typeof Links;
   url: string;
 };
 export type IUserProfile = {
-  userInfo: IUser;
+  userInfo: User;
   userCredential: IUserCredential;
 };
 export type IUserCredential = {
@@ -31,7 +31,7 @@ export type IPersonalInfo = {
   links: ILink[];
 };
 
-export type IUser = {
+export type User = {
   friendlyId: string;
   personalInfo: IPersonalInfo;
   userRole: string;
@@ -41,4 +41,15 @@ export type IUser = {
   deletedAt: Date;
   createdAt: Date;
   updatedAt: Date;
+};
+export type RegisteredUser = {
+  id: string;
+  email: string;
+  name: string;
+  age: number;
+};
+
+export type SigninInput = {
+  email: string;
+  password: string;
 };

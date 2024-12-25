@@ -1,16 +1,19 @@
-import { z } from "zod";
-import { signUpSchema, loginSchema } from "../../common/validation/user.validation";
+import { z } from 'zod';
+
+import { signInSchema, signUpSchema } from '../../common/validation/user.validation';
 
 export type SignUpInput = z.infer<typeof signUpSchema>;
-export type LoginInput = z.infer<typeof loginSchema>;
+export type LoginInput = z.infer<typeof signInSchema>;
 
-export interface UserResponse {
-  id: string;
-  email: string;
-  name: string;
-  age: number;
-}
-
-export type SignUpResponse = { success: true; data: UserResponse } | { success: false; message: string };
-
-export type LoginResponse = { success: true; token: string } | { success: false; message: string };
+export type RefreshTokenResult = {
+  accessToken: string;
+  refreshToken?: string;
+};
+export type SignUpResult = {
+  accessToken: string;
+  refreshToken: string;
+};
+export type LoginResult = {
+  accessToken: string;
+  refreshToken: string;
+};
