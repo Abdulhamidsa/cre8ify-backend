@@ -1,2 +1,2 @@
-const Links = ["CV"];
+const Links = ['CV'];
 export default Links;
