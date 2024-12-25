@@ -1,18 +1,17 @@
-import { RequestHandler } from "express";
-import { getAllUsersService } from "../services/user.service";
-import { getSuccessResponse } from "../../../common/utils/response.handler";
-// import { getUserProfileService } from "../services/user.profile.service";
-// import { editUserProfileService } from "../services/user.edit.service";
+import { RequestHandler } from 'express';
 
-// handler to fetching all users
-export const handleFetchAllUsers: RequestHandler = async (_req, res, next) => {
+import { createResponse } from '../../../common/utils/response.handler';
+import { getAllUsersService } from '../services/user.service';
+
+export const handleFetchAllUsers: RequestHandler = async (_req, res, next): Promise<void> => {
   try {
     const users = await getAllUsersService();
-    res.status(200).json(getSuccessResponse(users));
+    res.status(200).json(createResponse(true, users));
   } catch (error) {
     next(error);
   }
 };
+
 // fetch user profile
 // export const handleFetchUserProfile: RequestHandler = async (req, res, next) => {
 //   const userId = req.params.userid;
