@@ -2,17 +2,19 @@ import mongoose, { Document, Schema } from 'mongoose';
 
 interface IUser extends Document {
   mongo_ref: string;
-  email: string;
   name: string;
   age: number;
+  deletedAt: Date;
+  active: boolean;
 }
 
 const UserSchema: Schema = new Schema<IUser>(
   {
     mongo_ref: { type: String, unique: true },
-    email: { type: String, unique: true, required: true },
     name: { type: String, required: true },
     age: { type: Number, required: true },
+    active: { type: Boolean, default: true },
+    deletedAt: { type: Date, default: null },
   },
   { timestamps: true },
 );
