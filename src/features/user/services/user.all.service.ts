@@ -1,14 +1,14 @@
 import { AppError } from '../../../common/errors/app.error';
-import { User } from '../../../common/types/user.types';
+import { UserType } from '../../../common/types/user.types';
 import Logger from '../../../common/utils/logger';
-import Users from '../models/user.model';
+import { User } from '../models/user.model';
 
 // get all users
-export const getAllUsersService = async (): Promise<User[]> => {
+export const getAllUsersService = async (): Promise<UserType[]> => {
   try {
-    const users = await Users.find({})
+    const users = await User.find({})
       .select('-_id -__v -active -mongo_ref -updatedAt -deletedAt -userRole -approved -createdAt')
-      .lean<User[]>();
+      .lean<UserType[]>();
 
     if (!users.length) {
       throw new AppError('No users found', 404);
@@ -17,6 +17,6 @@ export const getAllUsersService = async (): Promise<User[]> => {
     return users;
   } catch (error) {
     Logger.error('Error fetching users:', error);
-    throw new AppError('An unexpected error occurred while fetching users', 500);
+    throw error;
   }
 };

@@ -5,7 +5,7 @@ import Logger from '../../common/utils/logger';
 import { saveDocument } from '../../common/utils/mongo.service';
 import { SQL_QUERIES } from '../../common/utils/sql.constants';
 import { SignUpInput } from '../../common/validation/user.validation';
-import Users from '../user/models/user.model';
+import { User } from '../user/models/user.model';
 
 export const signUpUserService = async (data: SignUpInput): Promise<void> => {
   const { email, password, name, age } = data;
@@ -32,7 +32,7 @@ export const signUpUserService = async (data: SignUpInput): Promise<void> => {
     }
 
     // Save additional user details in MongoDB
-    const mongoUser = await saveDocument(Users, {
+    const mongoUser = await saveDocument(User, {
       mongo_ref: mongoRef,
       name,
       age,
@@ -50,8 +50,7 @@ export const signUpUserService = async (data: SignUpInput): Promise<void> => {
     // Rollback MySQL transaction on any error
     await sqlClient.query('ROLLBACK');
     Logger.error('Error during user signup', error);
-
-    throw error instanceof AppError ? error : new AppError('Signup failed', 500);
+    throw error;
   } finally {
     sqlClient.release();
   }

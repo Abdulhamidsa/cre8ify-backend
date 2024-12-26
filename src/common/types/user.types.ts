@@ -7,7 +7,7 @@ type ILink = {
   url: string;
 };
 export type IUserProfile = {
-  userInfo: User;
+  userInfo: UserType;
   userCredential: IUserCredential;
 };
 export type IUserCredential = {
@@ -31,12 +31,10 @@ export type IPersonalInfo = {
   links: ILink[];
 };
 
-export type User = {
+export type UserType = {
   friendlyId: string;
   personalInfo: IPersonalInfo;
   userRole: string;
-  approved: boolean;
-  active: boolean;
   profilePicture: string;
   deletedAt: Date;
   createdAt: Date;

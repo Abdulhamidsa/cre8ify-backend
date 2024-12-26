@@ -9,7 +9,7 @@ import { ApiResponse, createResponse } from '../../common/utils/response.handler
 import { SQL_QUERIES } from '../../common/utils/sql.constants';
 import { withTransaction } from '../../common/utils/transaction.helper';
 import { SignInInput } from '../../common/validation/user.validation';
-import Users from '../user/models/user.model';
+import { User } from '../user/models/user.model';
 
 export const signInUser = async (data: SignInInput): Promise<ApiResponse<SignInResponse>> => {
   const { email, password } = data;
@@ -38,7 +38,7 @@ export const signInUser = async (data: SignInInput): Promise<ApiResponse<SignInR
     });
 
     // Validate user existence in MongoDB
-    const mongoUser = await Users.findOne({ mongo_ref: mongoRef });
+    const mongoUser = await User.findOne({ mongo_ref: mongoRef });
     if (!mongoUser) {
       throw new AppError('User not found in MongoDB', 500);
     }
@@ -50,8 +50,7 @@ export const signInUser = async (data: SignInInput): Promise<ApiResponse<SignInR
     return createResponse(true, { mongo_ref: mongoRef, accessToken, refreshToken });
   } catch (error) {
     Logger.error(`Error during user sign-in: ${(error as Error).message}`);
-    const message = error instanceof AppError ? error.message : 'Signin failed';
-    throw new AppError(message, error instanceof AppError ? error.status : 500);
+    throw error;
   } finally {
     sqlClient.release();
   }

@@ -1,3 +1,4 @@
+import { mongo } from 'mongoose';
 import { z } from 'zod';
 
 // Sign-up Schema
@@ -41,3 +42,12 @@ export const userSchema = z.object({
   profilePicture: z.string().optional(),
 });
 export type User = z.infer<typeof userSchema>;
+
+export const userResponeSchema = z.object({
+  _id: z.string(),
+  mongo_ref: z.string(),
+  name: z.string().optional(),
+  age: z.number(),
+  createdAt: z.string(),
+});
+export type UserResponse = z.infer<typeof userResponeSchema>;

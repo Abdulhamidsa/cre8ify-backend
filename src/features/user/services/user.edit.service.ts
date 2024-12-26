@@ -1,15 +1,15 @@
 import { AppError } from '../../../common/errors/app.error';
 import Logger from '../../../common/utils/logger';
 import { EditUserInput } from '../../../common/validation/user.validation';
-import Users from '../models/user.model';
+import { User } from '../models/user.model';
 
 export const editUserProfileService = async (mongoRef: string, profileData: EditUserInput): Promise<EditUserInput> => {
   try {
-    const updatedUser = await Users.findOneAndUpdate(
+    const updatedUser = await User.findOneAndUpdate(
       { mongo_ref: mongoRef },
       { $set: profileData },
       { new: true, lean: true, runValidators: true },
-    ).select('-password -__v -active -updatedAt -deletedAt');
+    ).select('-password -active -updatedAt -deletedAt');
 
     if (!updatedUser) {
       throw new AppError('User not found', 404);
@@ -18,6 +18,6 @@ export const editUserProfileService = async (mongoRef: string, profileData: Edit
     return updatedUser;
   } catch (error) {
     Logger.error(`Error updating user profile for ${mongoRef}:`, error);
-    throw new AppError('Failed to update user profile', 500);
+    throw error;
   }
 };

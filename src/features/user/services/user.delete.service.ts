@@ -1,6 +1,5 @@
 import { getSQLClient } from '../../../common/config/sql-client';
 import { AppError } from '../../../common/errors/app.error';
-import { getErrorMessage } from '../../../common/utils/error.utils';
 import Logger from '../../../common/utils/logger';
 import { SQL_QUERIES } from '../../../common/utils/sql.constants';
 import Users from '../models/user.model';
@@ -37,8 +36,7 @@ export const deleteUserService = async (mongoRef: string): Promise<void> => {
     await sqlClient.query('ROLLBACK');
     Logger.error(`Error deleting user with mongo_ref ${mongoRef}:`, error);
 
-    const message = getErrorMessage(error);
-    throw new AppError(message || 'Failed to delete user account', error instanceof AppError ? error.status : 500);
+    throw error;
   } finally {
     sqlClient.release();
   }
