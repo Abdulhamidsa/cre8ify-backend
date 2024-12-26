@@ -1,17 +1,6 @@
 import mongoose, { Document, Model, Schema } from 'mongoose';
 
-// Define the base AddProject type
-export type AddProject = {
-  userId: mongoose.Types.ObjectId;
-  title: string;
-  description: string;
-  projectUrl: string;
-  projectImage: { url: string }[];
-  projectThumbnail?: string;
-  tags: string[];
-  createdAt: Date;
-  updatedAt: Date;
-};
+import { AddProject } from '../../../common/types/types';
 
 // Extend AddProject with Mongoose-specific fields
 export interface ProjectDocument extends AddProject, Document {}
@@ -57,7 +46,19 @@ const projectSchema: Schema<ProjectDocument> = new Schema(
     ],
   },
   {
-    timestamps: true,
+    timestamps: true, // Automatically adds `createdAt` and `updatedAt`
+    toJSON: {
+      transform: (_doc, ret) => {
+        delete ret.__v; // Remove __v globally
+        return ret;
+      },
+    },
+    toObject: {
+      transform: (_doc, ret) => {
+        delete ret.__v; // Remove __v globally
+        return ret;
+      },
+    },
   },
 );
 

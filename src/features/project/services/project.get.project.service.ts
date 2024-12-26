@@ -1,12 +1,12 @@
 import { AppError } from '../../../common/errors/app.error';
 import Logger from '../../../common/utils/logger';
-import Users from '../../user/models/user.model';
+import { User } from '../../user/models/user.model';
 import { Project } from '../models/projects.model';
 
 export const getUserProjectsService = async (mongoRef: string) => {
   try {
     // Fetch the user based on mongoRef
-    const user = await Users.findOne({ mongo_ref: mongoRef }).lean();
+    const user = await User.findOne({ mongo_ref: mongoRef }).lean();
     if (!user) {
       throw new AppError('User not found', 404);
     }
@@ -33,6 +33,6 @@ export const getUserProjectsService = async (mongoRef: string) => {
     return transformedProjects;
   } catch (error) {
     Logger.error(`Error fetching projects for mongoRef ${mongoRef}:`, error);
-    throw new AppError('Failed to fetch projects', 500);
+    throw error;
   }
 };

@@ -22,27 +22,29 @@ export const getProjectValidationSchema = z.object({
   id: mongoIdValidationSchema,
 });
 
-// Define the Zod schema for get projects
-
-// Define the schema for a project
-const projectSchema = z.object({
-  id: z.string().transform((val) => val), // Rename _id to id
-  userId: z.string(),
-  title: z.string(),
-  description: z.string(),
-  projectUrl: z.string(),
-  projectImage: z.array(
-    z.object({
-      url: z.string(),
-    }),
-  ),
-  tags: z.array(z.string()), // Array of tag IDs
-  createdAt: z.date(),
-  updatedAt: z.date(),
-});
-
 // Use this schema to process multiple projects
 // const projectArraySchema = z.array(projectSchema);
 
 // Type inference
-export type Project = z.infer<typeof projectSchema>;
+
+// Define the schema for editing a project
+export const editProjectValidationSchema = z.object({
+  title: z.string().optional(),
+  description: z.string().optional(),
+  projectUrl: z.string().url('Invalid URL for projectUrl').optional(),
+  projectImage: z
+    .array(
+      z.object({
+        url: z.string().url('Invalid URL for image'),
+      }),
+    )
+    .optional(),
+  projectThumbnail: z.string().url('Invalid URL for thumbnail').optional(),
+  tags: z.array(z.string()).optional(),
+});
+
+export type EditProjectInput = z.infer<typeof editProjectValidationSchema>;
+
+export const projectIdValidationSchema = z.object({
+  id: z.string().regex(/^[a-fA-F0-9]{24}$/, 'Invalid MongoDB ObjectId'),
+});
