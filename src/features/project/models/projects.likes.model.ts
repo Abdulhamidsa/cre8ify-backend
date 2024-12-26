@@ -1,4 +1,4 @@
-import mongoose, { Schema, Model } from "mongoose";
+import mongoose, { Model, Schema } from 'mongoose';
 
 type ProjectLikes = {
   userId: mongoose.Types.ObjectId;
@@ -9,12 +9,12 @@ type ProjectLikes = {
 const projectLikeSchema: Schema<ProjectLikes> = new Schema({
   userId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "user",
+    ref: 'user',
     required: true,
   },
   projectId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "project",
+    ref: 'project',
     required: true,
   },
   likedAt: {
@@ -22,4 +22,4 @@ const projectLikeSchema: Schema<ProjectLikes> = new Schema({
     default: Date.now,
   },
 });
-export const ProjectLike: Model<ProjectLikes> = mongoose.model<ProjectLikes>("ProjectLike", projectLikeSchema);
+export const ProjectLike: Model<ProjectLikes> = mongoose.model<ProjectLikes>('ProjectLike', projectLikeSchema);
