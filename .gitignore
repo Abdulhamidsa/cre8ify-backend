@@ -45,7 +45,6 @@ app.log
 # Lock files
 pnpm-lock.yaml
 yarn.lock
-package-lock.json
 
 # IDE/Editor directories and files
 .vscode/
