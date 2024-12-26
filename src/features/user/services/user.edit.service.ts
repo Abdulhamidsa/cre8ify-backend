@@ -1,43 +1,23 @@
-// import Users from "../models/user.model";
-// import { IUser } from "../../../common/types/user.types";
+import { AppError } from '../../../common/errors/app.error';
+import Logger from '../../../common/utils/logger';
+import { EditUserInput } from '../../../common/validation/user.validation';
+import Users from '../models/user.model';
 
-// interface EditUserProfileData {
-//   profilePicture?: string;
-//   bio?: string;
-//   profession?: string;
-//   country?: string;
-//   links?: string[];
-// }
+export const editUserProfileService = async (mongoRef: string, profileData: EditUserInput): Promise<EditUserInput> => {
+  try {
+    const updatedUser = await Users.findOneAndUpdate(
+      { mongo_ref: mongoRef },
+      { $set: profileData },
+      { new: true, lean: true, runValidators: true },
+    ).select('-password -__v -active -updatedAt -deletedAt');
 
-// export const editUserProfileService = async (userId: string, data: EditUserProfileData): Promise<IUser> => {
-//   try {
-//     const updateData: Record<string, any> = {}; // Dynamic object for updates
+    if (!updatedUser) {
+      throw new AppError('User not found', 404);
+    }
 
-//     if (data.profilePicture) {
-//       updateData["personalInfo.profilePicture"] = data.profilePicture;
-//     }
-//     if (data.bio) {
-//       updateData["personalInfo.bio"] = data.bio;
-//     }
-//     if (data.profession) {
-//       updateData["personalInfo.profession"] = data.profession;
-//     }
-//     if (data.country) {
-//       updateData["personalInfo.country"] = data.country;
-//     }
-//     if (data.links && Array.isArray(data.links)) {
-//       updateData["personalInfo.links"] = data.links;
-//     }
-
-//     const user = await Users.findByIdAndUpdate(userId, { $set: updateData }, { new: true });
-
-//     if (!user) {
-//       throw { message: "User not found", status: 404 };
-//     }
-//   } catch (error: any) {
-//     throw {
-//       message: error.message || "Error editing user profile",
-//       status: error.status || 500,
-//     };
-//   }
-// };
+    return updatedUser;
+  } catch (error) {
+    Logger.error(`Error updating user profile for ${mongoRef}:`, error);
+    throw new AppError('Failed to update user profile', 500);
+  }
+};

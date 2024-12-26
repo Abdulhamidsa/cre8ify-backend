@@ -1,25 +1,25 @@
-// import User from "../models/user.model";
-// import { Credential } from "../models/user.credential.model";
-// import { AppError } from "../../../common/errors/app.error";
-// import { IUserProfile } from "../../../common/types/user.types";
-// export const getUserProfileService = async (userId: string): Promise<IUserProfile> => {
-//   try {
-//     console.log(userId);
-//     const userInfo = await User.findById(userId).select("-_id -__v -active -updatedAt").lean();
-//     const userCredential = await Credential.findById(userId).select("-password -_id -__v").lean();
+import { AppError } from '../../../common/errors/app.error';
+import { User } from '../../../common/types/user.types';
+import Logger from '../../../common/utils/logger';
+import Users from '../models/user.model';
 
-//     if (!userInfo) {
-//       throw new AppError("User not found", 404);
-//     }
-//     if (userInfo) {
-//       console.log(userInfo);
-//     }
-//     if (!userCredential) {
-//       throw new AppError("User credential not found", 404);
-//     }
-//     const user: IUserProfile = { userInfo, userCredential };
-//     return user;
-//   } catch (error: any) {
-//     throw new AppError(error.message || "Error fetching user profile", error.status || 500);
-//   }
-// };
+export const getUserProfileService = async (mongoRef: string): Promise<User> => {
+  try {
+    // Fetch the user profile based on mongoRef
+    const user = await Users.findOne({ mongo_ref: mongoRef })
+      .select(' -__v -active -updatedAt -deletedAt')
+      .lean<User>(); // lean() for better performance
+
+    if (!user) {
+      throw new AppError('User profile not found', 404);
+    }
+
+    return user;
+  } catch (error) {
+    Logger.error('Error fetching user profile', error);
+    throw new AppError(
+      error instanceof AppError ? error.message : 'An unexpected error occurred while fetching the user profile',
+      error instanceof AppError ? error.status : 500,
+    );
+  }
+};
