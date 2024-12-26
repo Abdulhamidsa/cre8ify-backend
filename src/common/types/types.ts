@@ -1,3 +1,4 @@
+import mongoose from 'mongoose';
 import { z } from 'zod';
 
 import { signInSchema, signUpSchema } from '../../common/validation/user.validation';
@@ -16,4 +17,16 @@ export type SignUpResult = {
 export type LoginResult = {
   accessToken: string;
   refreshToken: string;
+};
+
+export type AddProject = {
+  userId: mongoose.Types.ObjectId;
+  title: string;
+  description: string;
+  projectUrl: string;
+  projectImage: [{ url: string }];
+  projectThumbnail?: string;
+  tags: string[];
+  createdAt: Date;
+  updatedAt: Date;
 };
