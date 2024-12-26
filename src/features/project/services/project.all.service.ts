@@ -1,7 +1,8 @@
-import { Types } from "mongoose";
-import { Project } from "../models/projects.model";
-import { ProjectLike } from "../models/projects.likes.model";
-import { AppError } from "../../../common/errors/app.error";
+import { Types } from 'mongoose';
+
+import { AppError } from '../../../common/errors/app.error';
+import { ProjectLike } from '../models/projects.likes.model';
+import { Project } from '../models/projects.model';
 
 type UserPersonalInfo = {
   personalInfo: {
@@ -40,14 +41,16 @@ export type ProjectWithLikeStatus = ProjectBaseType & {
 export const fetchAllProjects = async (userId: string): Promise<ProjectWithLikeStatus[]> => {
   try {
     // Fetch all projects and populate userId fields
-    const projects = await Project.find().populate("userId", "personalInfo.profilePicture personalInfo.username personalInfo.profession").exec();
+    const projects = await Project.find()
+      .populate('userId', 'personalInfo.profilePicture personalInfo.username personalInfo.profession')
+      .exec();
 
     if (!projects || projects.length === 0) {
-      throw new AppError("No projects found", 404);
+      throw new AppError('No projects found', 404);
     }
 
     // Fetch liked projects by the user
-    const likedProjects = await ProjectLike.find({ userId }).select("projectId").exec();
+    const likedProjects = await ProjectLike.find({ userId }).select('projectId').exec();
     const likedProjectIds = likedProjects.map((like) => like.projectId.toString());
 
     // Map projects and ensure projectImage is properly formatted
@@ -64,12 +67,12 @@ export const fetchAllProjects = async (userId: string): Promise<ProjectWithLikeS
           likedByUser: likedProjectIds.includes(project._id.toString()),
           likeCount,
         };
-      })
+      }),
     );
 
     return projectsWithLikedStatus;
   } catch (error: any) {
-    console.error("Error fetching projects:", error);
-    throw new AppError(error.message || "An error occurred while fetching projects", 500);
+    console.error('Error fetching projects:', error);
+    throw new AppError(error.message || 'An error occurred while fetching projects', 500);
   }
 };
