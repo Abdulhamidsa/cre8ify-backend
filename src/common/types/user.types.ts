@@ -53,3 +53,11 @@ export type SigninInput = {
   email: string;
   password: string;
 };
+
+// signin response
+export type SignInResponse = {
+  mongo_ref?: string;
+  accessToken: string;
+  refreshToken: string;
+  role?: string;
+};
