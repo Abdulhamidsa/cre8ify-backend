@@ -1,32 +1,16 @@
-// import { Pool } from "pg";
-// import { SECRETS } from "./config";
-// import { AppError } from "../errors/app.error";
-// import { getErrorMessage } from "../utils/error.utils";
-// const pool = new Pool({
-//   connectionString: SECRETS.postgresConnectionString,
-//   ssl: {
-//     rejectUnauthorized: false, // Required for some hosted services like Railway
-//   },
-// });
-// export const connectPostgres = async (): Promise<void> => {
-//   try {
-//     await pool.connect();
-//     console.log("Connected to PostgreSQL successfully!");
-//   } catch (error) {
-//     new AppError(getErrorMessage(error), 500);
-//   }
-// };
-// export default pool;
 import { Pool, PoolClient } from 'pg';
 
 import { AppError } from '../errors/app.error';
 import { getErrorMessage } from '../utils/error.utils';
 import { SECRETS } from './config';
 
-// Create a pool but do not connect at startup
+// SSL Configuration based on environment
+const sslConfig = SECRETS.nodeEnv === 'production' ? { rejectUnauthorized: true } : { rejectUnauthorized: false };
+
+// Create the pool instance
 const pool = new Pool({
   connectionString: SECRETS.postgresConnectionString,
-  ssl: { rejectUnauthorized: false },
+  ssl: sslConfig,
 });
 
 // Function to get a client on demand
@@ -38,3 +22,18 @@ export const getSQLClient = async (): Promise<PoolClient> => {
     throw new AppError(getErrorMessage(error), 500);
   }
 };
+
+// Health check function for PostgreSQL
+export const checkPostgresHealth = async (): Promise<void> => {
+  try {
+    const client = await getSQLClient();
+    await client.query('SELECT 1');
+    client.release();
+    console.log('PostgreSQL connection is healthy');
+  } catch (error) {
+    console.error('PostgreSQL health check failed:', getErrorMessage(error));
+    throw new AppError('PostgreSQL health check failed', 500);
+  }
+};
+
+export default pool;

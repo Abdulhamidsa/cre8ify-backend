@@ -6,4 +6,5 @@ export const SQL_QUERIES = {
   `,
   rollbackUser: 'DELETE FROM users WHERE id = $1;',
   getUserLogin: 'SELECT password_hash, mongo_ref FROM users WHERE email = $1;',
+  deleteUser: 'DELETE FROM users WHERE mongo_ref = $1;',
 };
