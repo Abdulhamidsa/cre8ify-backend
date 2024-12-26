@@ -1,36 +1,38 @@
-import mongoose, { Model, Schema } from 'mongoose';
+import mongoose, { Document, Model, Schema } from 'mongoose';
 
-interface IProjectImage {
-  _id: any;
-  url: string;
-}
-
-export type ProjectSchema = {
-  _id: mongoose.Types.ObjectId;
+// Define the base AddProject type
+export type AddProject = {
   userId: mongoose.Types.ObjectId;
   title: string;
   description: string;
   projectUrl: string;
-  projectImage: IProjectImage[];
+  projectImage: { url: string }[];
   projectThumbnail?: string;
-  tags: mongoose.Types.ObjectId[];
+  tags: string[];
   createdAt: Date;
   updatedAt: Date;
 };
-const projectSchema: Schema<ProjectSchema> = new Schema(
+
+// Extend AddProject with Mongoose-specific fields
+export interface ProjectDocument extends AddProject, Document {}
+
+// Define the schema
+const projectSchema: Schema<ProjectDocument> = new Schema(
   {
     userId: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: Schema.Types.ObjectId,
       ref: 'User',
       required: true,
     },
     title: {
       type: String,
       required: true,
+      trim: true,
     },
     description: {
       type: String,
       required: true,
+      trim: true,
     },
     projectUrl: {
       type: String,
@@ -49,12 +51,15 @@ const projectSchema: Schema<ProjectSchema> = new Schema(
     },
     tags: [
       {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Tag',
+        type: String,
+        default: [], // Default to an empty array if undefined
       },
     ],
   },
-  { timestamps: true },
+  {
+    timestamps: true,
+  },
 );
 
-export const Project: Model<ProjectSchema> = mongoose.model<ProjectSchema>('Project', projectSchema);
+// Create the model
+export const Project: Model<ProjectDocument> = mongoose.model<ProjectDocument>('Project', projectSchema);
