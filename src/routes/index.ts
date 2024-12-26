@@ -1,13 +1,14 @@
-import express from 'express';
+import { Router } from 'express';
 
-import authRoutes from '../features/auth/auth.route';
-import userRoutes from '../features/user/user.route';
+import privateRoutes from './private.routes';
+import publicRoutes from './public.routes';
 
-const router = express.Router();
+const router = Router();
 
-// user routes
-router.use('/users', userRoutes);
-// auth routes
-router.use('/auth', authRoutes);
+// Public routes (accessible without authentication)
+router.use('/internal', privateRoutes);
+
+// Private routes (require authentication)
+router.use('/public', publicRoutes);
 
 export default router;

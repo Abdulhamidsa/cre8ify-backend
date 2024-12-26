@@ -1,15 +1,18 @@
-import { Router } from 'express';
+// import { Router } from 'express';
 
-import { handleFetchAllUsers } from './handlers/user.handler';
+// import { handleFetchAllUsers, handleFetchUserProfile } from './handlers/user.handler';
 
-const router = Router();
+// const userRouter = Router();
 
-// fetch all users
-router.get('/', handleFetchAllUsers);
+// // ==============================
+// //          PUBLIC ROUTES
+// // ==============================
+// userRouter.get('/', handleFetchAllUsers); // Fetch all users (public)
 
-// fetch user profile
-// router.get("/:userid", handleFetchUserProfile);
+// // ==============================
+// //         PRIVATE ROUTES
+// // ==============================
 
-// router.put("/:userId", handleEditUserProfile);
+// userRouter.get('/profile/:friendlyId', handleFetchUserProfile); // Fetch the authenticated user's profile
 
-export default router;
+// export default userRouter;
