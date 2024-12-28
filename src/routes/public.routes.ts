@@ -14,7 +14,7 @@ const router = Router();
 // ==============================
 
 router.post('/signup', ValidZod(signUpSchema, 'body'), signupHandler);
-router.get('/signin', ValidZod(signInSchema, 'body'), signInHandler);
+router.post('/signin', ValidZod(signInSchema, 'body'), signInHandler);
 router.post('/refresh-token', refreshTokenHandler);
 
 // ==============================

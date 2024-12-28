@@ -16,7 +16,7 @@ export const SECRETS = {
   refreshTokenMaxAge: process.env.REFRESHTOKEN_MAXAGE
     ? parseInt(process.env.REFRESHTOKEN_MAXAGE)
     : 7 * 24 * 60 * 60 * 1000, // 7 days
-  reactAppCorsOrigin: process.env.REACT_APP_CORS_ORIGIN || 'http://localhost:3000',
+  reactAppCorsOrigin: process.env.REACT_APP_CORS_ORIGIN || 'http://localhost:5173',
   dbPoolMin: process.env.DB_POOL_MIN ? parseInt(process.env.DB_POOL_MIN) : 1,
   dbPoolMax: process.env.DB_POOL_MAX ? parseInt(process.env.DB_POOL_MAX) : 5,
   logLevel: process.env.LOG_LEVEL || 'debug',
@@ -27,5 +27,5 @@ export const SECRETS = {
   rateLimitMax: process.env.RATE_LIMIT_MAX ? parseInt(process.env.RATE_LIMIT_MAX) : 500, // Higher limit for dev
   sentryDsn: process.env.SENTRY_DSN || '',
   apiBaseUrl: process.env.API_BASE_URL || 'http://localhost:4000',
-  frontendAppUrl: process.env.FRONTEND_APP_URL || 'http://localhost:3000',
+  frontendAppUrl: process.env.FRONTEND_APP_URL || 'http://localhost:5173',
 };

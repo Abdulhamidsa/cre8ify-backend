@@ -1,12 +1,12 @@
 import { AppError } from '../../../common/errors/app.error';
 import { User } from '../../../common/types/user.types';
 import Logger from '../../../common/utils/logger';
-import Users from '../models/user.model';
+import { UserProfile } from '../models/user.model';
 
 // get all users
 export const getAllUsersService = async (): Promise<User[]> => {
   try {
-    const users = await Users.find({})
+    const users = await UserProfile.find({})
       .select('-_id -__v -active -mongo_ref -updatedAt -deletedAt -userRole -approved -createdAt')
       .lean<User[]>();
 

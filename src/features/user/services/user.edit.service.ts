@@ -1,23 +1,31 @@
 import { AppError } from '../../../common/errors/app.error';
-import Logger from '../../../common/utils/logger';
-import { EditUserInput } from '../../../common/validation/user.validation';
-import Users from '../models/user.model';
+import { EditUserProfileInput } from '../../../common/validation/user.validation';
+import { UserProfile } from '../models/user.model';
 
-export const editUserProfileService = async (mongoRef: string, profileData: EditUserInput): Promise<EditUserInput> => {
-  try {
-    const updatedUser = await Users.findOneAndUpdate(
-      { mongo_ref: mongoRef },
-      { $set: profileData },
-      { new: true, lean: true, runValidators: true },
-    ).select('-password -__v -active -updatedAt -deletedAt');
+export const editUserProfileService = async (
+  mongoRef: string,
+  profileData: EditUserProfileInput,
+): Promise<{ profileComplete: boolean }> => {
+  const requiredFields: (keyof EditUserProfileInput)[] = ['bio', 'age', 'country', 'profession'];
 
-    if (!updatedUser) {
-      throw new AppError('User not found', 404);
-    }
+  // Update the profile
+  const updatedProfile = await UserProfile.findOneAndUpdate(
+    { mongo_ref: mongoRef },
+    { $set: profileData },
+    { new: true, runValidators: true, lean: true },
+  );
 
-    return updatedUser;
-  } catch (error) {
-    Logger.error(`Error updating user profile for ${mongoRef}:`, error);
-    throw new AppError('Failed to update user profile', 500);
+  if (!updatedProfile) {
+    throw new AppError('User profile not found', 404);
   }
+
+  // Check if all required fields are present
+  const isProfileComplete = requiredFields.every((field) => !!updatedProfile[field]);
+
+  // Update the `profileComplete` field if needed
+  if (updatedProfile.profileComplete !== isProfileComplete) {
+    await UserProfile.updateOne({ mongo_ref: mongoRef }, { profileComplete: isProfileComplete });
+  }
+
+  return { profileComplete: isProfileComplete };
 };

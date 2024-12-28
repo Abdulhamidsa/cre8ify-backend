@@ -1,14 +1,14 @@
 import { AppError } from '../../../common/errors/app.error';
-import { User } from '../../../common/types/user.types';
+// import { User } from '../../../common/types/user.types';
 import Logger from '../../../common/utils/logger';
-import Users from '../models/user.model';
+import { UserProfile } from '../models/user.model';
 
-export const getUserProfileService = async (mongoRef: string): Promise<User> => {
+export const getUserProfileService = async (mongoRef: string) => {
   try {
     // Fetch the user profile based on mongoRef
-    const user = await Users.findOne({ mongo_ref: mongoRef })
+    const user = await UserProfile.findOne({ mongo_ref: mongoRef })
       .select(' -__v -active -updatedAt -deletedAt')
-      .lean<User>(); // lean() for better performance
+      .lean(); // lean() for better performance
 
     if (!user) {
       throw new AppError('User profile not found', 404);

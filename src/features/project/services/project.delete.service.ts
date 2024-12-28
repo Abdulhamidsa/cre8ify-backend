@@ -1,12 +1,12 @@
 import { AppError } from '../../../common/errors/app.error';
 import Logger from '../../../common/utils/logger';
-import { User } from '../../user/models/user.model';
+import { UserProfile } from '../../user/models/user.model';
 import { Project } from '../models/projects.model';
 
 export const deleteProjectService = async (mongoRef: string, projectId: string) => {
   try {
     // Check if the user exists based on mongoRef
-    const user = await User.findOne({ mongo_ref: mongoRef }).lean();
+    const user = await UserProfile.findOne({ mongo_ref: mongoRef }).lean();
     if (!user) {
       throw new AppError('User not found', 404); // Specific error for user not found
     }

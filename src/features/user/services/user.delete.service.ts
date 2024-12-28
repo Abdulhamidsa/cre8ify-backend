@@ -3,7 +3,7 @@ import { AppError } from '../../../common/errors/app.error';
 import { getErrorMessage } from '../../../common/utils/error.utils';
 import Logger from '../../../common/utils/logger';
 import { SQL_QUERIES } from '../../../common/utils/sql.constants';
-import Users from '../models/user.model';
+import { UserProfile } from '../models/user.model';
 
 export const deleteUserService = async (mongoRef: string): Promise<void> => {
   const sqlClient = await getSQLClient();
@@ -18,7 +18,7 @@ export const deleteUserService = async (mongoRef: string): Promise<void> => {
     }
 
     // 2. Mark user as inactive in MongoDB
-    const deletedUser = await Users.findOneAndUpdate(
+    const deletedUser = await UserProfile.findOneAndUpdate(
       { mongo_ref: mongoRef },
       { $set: { active: false, deletedAt: new Date() } },
       { new: true },

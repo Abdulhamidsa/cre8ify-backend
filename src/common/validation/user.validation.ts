@@ -2,11 +2,8 @@ import { z } from 'zod';
 
 // Sign-up Schema
 export const signUpSchema = z.object({
-  id: z.string().optional(),
   email: z.string().email('Invalid email format'),
   password: z.string().min(8, 'Password must be at least 8 characters'),
-  name: z.string().nonempty('Name cannot be empty'),
-  age: z.number().positive('Age must be a positive number'),
 });
 export type SignUpInput = z.infer<typeof signUpSchema>;
 
@@ -23,14 +20,16 @@ export const refreshTokenSchema = z.object({
 });
 export type RefreshTokenInput = z.infer<typeof refreshTokenSchema>;
 
-// edit user schema
-export const editUserSchema = z.object({
-  name: z.string().min(1, 'Name cannot be empty').optional(),
-  age: z.number().positive('Age must be a positive number').optional(),
-  bio: z.string().max(500, 'Bio must not exceed 500 characters').optional(),
-  profilePicture: z.string().url('Invalid URL format').optional(),
+// Zod schema for editing a user profile
+export const editUserProfileValidationSchema = z.object({
+  bio: z.string().max(500, 'Bio cannot exceed 500 characters').optional(),
+  age: z.number().int().positive('Age must be a positive integer').optional(),
+  country: z.string().max(100, 'Country name is too long').optional(),
+  profession: z.string().max(100, 'Profession name is too long').optional(),
 });
-export type EditUserInput = z.infer<typeof editUserSchema>;
+
+// Infer the TypeScript type from the Zod schema
+export type EditUserProfileInput = z.infer<typeof editUserProfileValidationSchema>;
 
 // user schema
 export const userSchema = z.object({

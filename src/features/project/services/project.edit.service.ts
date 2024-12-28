@@ -1,12 +1,12 @@
 import { AppError } from '../../../common/errors/app.error';
 import Logger from '../../../common/utils/logger';
-import { EditProjectInput } from '../../../common/validation/project.validation';
-import { User } from '../../user/models/user.model';
+import { UserProfile, UserProfileDocument } from '../../user/models/user.model';
 import { Project } from '../models/projects.model';
 
-export const editProjectService = async (mongoRef: string, projectId: string, projectData: EditProjectInput) => {
+export const editProjectService = async (mongoRef: string, projectId: string, projectData: UserProfileDocument) => {
+  console.log('editProjectService', mongoRef, projectId, projectData);
   try {
-    const user = await User.findOne({ mongo_ref: mongoRef }).lean();
+    const user = await UserProfile.findOne({ mongo_ref: mongoRef }).lean();
     if (!user) {
       throw new AppError('User not found', 404);
     }

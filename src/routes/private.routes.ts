@@ -3,12 +3,8 @@ import { Router } from 'express';
 import { attachUserContext } from '../common/middleware/attach.user.context';
 import { authenticateAndRefresh } from '../common/middleware/authintication.middleware';
 import { ValidZod } from '../common/middleware/zod.middleware';
-import {
-  editProjectValidationSchema,
-  projectIdValidationSchema,
-  projectValidationSchema,
-} from '../common/validation/project.validation';
-import { editUserSchema } from '../common/validation/user.validation';
+import { projectIdValidationSchema, projectValidationSchema } from '../common/validation/project.validation';
+import { editUserProfileValidationSchema } from '../common/validation/user.validation';
 import {
   handleAddProject,
   handleDeleteProject,
@@ -26,7 +22,7 @@ router.use(authenticateAndRefresh, attachUserContext);
 // ==============================
 
 router.get('/profile/:friendlyId', handleFetchUserProfile);
-router.put('/profile', ValidZod(editUserSchema, 'body'), handleEditUserProfile);
+router.put('/profile', ValidZod(editUserProfileValidationSchema, 'body'), handleEditUserProfile);
 router.delete('/profile', handleDeleteUser);
 
 // ==============================
@@ -43,7 +39,7 @@ router.get('/projects', handleGetUserProjects);
 router.put(
   '/project/:id',
   ValidZod(projectIdValidationSchema, 'params'),
-  ValidZod(editProjectValidationSchema, 'body'),
+  ValidZod(projectValidationSchema, 'body'),
   handleEditProject,
 );
 // delete project

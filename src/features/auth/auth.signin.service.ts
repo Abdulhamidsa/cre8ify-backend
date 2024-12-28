@@ -9,7 +9,7 @@ import { ApiResponse, createResponse } from '../../common/utils/response.handler
 import { SQL_QUERIES } from '../../common/utils/sql.constants';
 import { withTransaction } from '../../common/utils/transaction.helper';
 import { SignInInput } from '../../common/validation/user.validation';
-import Users from '../user/models/user.model';
+import { UserProfile } from '../user/models/user.model';
 
 export const signInUser = async (data: SignInInput): Promise<ApiResponse<SignInResponse>> => {
   const { email, password } = data;
@@ -38,7 +38,7 @@ export const signInUser = async (data: SignInInput): Promise<ApiResponse<SignInR
     });
 
     // Validate user existence in MongoDB
-    const mongoUser = await Users.findOne({ mongo_ref: mongoRef });
+    const mongoUser = await UserProfile.findOne({ mongo_ref: mongoRef });
     if (!mongoUser) {
       throw new AppError('User not found in MongoDB', 500);
     }

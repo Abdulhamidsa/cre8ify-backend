@@ -1,9 +1,11 @@
 import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
+import cors from 'cors';
 import express, { Request, Response } from 'express';
 import { rateLimit } from 'express-rate-limit';
 
 import { SECRETS } from './common/config/config';
+import { corsOptions } from './common/config/cors';
 import { connectMongoDB } from './common/config/mongo.connection';
 import { getSQLClient } from './common/config/sql-client';
 import expressErrorMiddleware from './common/middleware/error.middleware';
@@ -26,6 +28,7 @@ app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(limiter);
 app.use(express.json());
+app.use(cors(corsOptions));
 
 // Routes
 app.get('/', (_req: Request, res: Response) => {
@@ -49,3 +52,12 @@ export const start = async (): Promise<void> => {
     process.exit(1);
   }
 };
+// function cors(corsOptions: {
+//   origin: string;
+//   credentials: boolean;
+//   optionsSuccessStatus: number;
+//   allowedHeaders: string[];
+//   methods: string[];
+// }): any {
+//   throw new Error('Function not implemented.');
+// }

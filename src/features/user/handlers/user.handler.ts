@@ -29,23 +29,19 @@ export const handleFetchUserProfile: RequestHandler = async (_req, res, next) =>
 
 // edit user profile
 
-export const handleEditUserProfile: RequestHandler = async (req, res, next): Promise<void> => {
+export const handleEditUserProfile: RequestHandler = async (req, res, next) => {
   try {
     const mongoRef = res.locals.mongoRef;
     const profileData = req.body;
 
-    if (!mongoRef) {
-      res.status(401).json(createResponse(false, 'User is not authenticated'));
-      return;
-    }
+    // Call the service to update the profile
+    const result = await editUserProfileService(mongoRef, profileData);
 
-    const updatedProfile = await editUserProfileService(mongoRef, profileData);
-    res.status(200).json(createResponse(true, updatedProfile));
+    res.status(200).json(createResponse(true, result));
   } catch (error) {
-    next(error);
+    next(error); // Pass error to middleware
   }
 };
-
 // delete user profile
 
 export const handleDeleteUser: RequestHandler = async (_req, res, next): Promise<void> => {
