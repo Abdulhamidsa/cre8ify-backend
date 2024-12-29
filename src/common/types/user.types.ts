@@ -57,5 +57,6 @@ export type SignInResponse = {
   mongo_ref?: string;
   accessToken: string;
   refreshToken: string;
+  friendlyId: string;
   role?: string;
 };

@@ -1,9 +1,10 @@
 import mongoose, { Document, Schema } from 'mongoose';
 
 interface IUser extends Document {
-  mongo_ref: string;
+  mongoRef: string;
   name: string;
   age: number;
+  friendlyId: string;
   deletedAt: Date | null;
   active: boolean;
   createdAt: Date;
@@ -12,19 +13,24 @@ interface IUser extends Document {
 
 const UserSchema: Schema<IUser> = new Schema(
   {
-    mongo_ref: {
+    mongoRef: {
+      type: String,
+      unique: true,
+      required: true,
+    },
+    friendlyId: {
       type: String,
       unique: true,
       required: true,
     },
     name: {
       type: String,
-      required: true,
+      required: false,
       trim: true,
     },
     age: {
       type: Number,
-      required: true,
+      required: false,
     },
     active: {
       type: Boolean,
@@ -36,16 +42,16 @@ const UserSchema: Schema<IUser> = new Schema(
     },
   },
   {
-    timestamps: true, // Automatically adds `createdAt` and `updatedAt`
+    timestamps: true,
     toJSON: {
       transform: (_doc, ret) => {
-        delete ret.__v; // Remove __v globally
+        delete ret.__v;
         return ret;
       },
     },
     toObject: {
       transform: (_doc, ret) => {
-        delete ret.__v; // Remove __v globally
+        delete ret.__v;
         return ret;
       },
     },

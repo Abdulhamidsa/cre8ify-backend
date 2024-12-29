@@ -5,12 +5,13 @@ import { getErrorMessage } from '../utils/error.utils';
 import { SECRETS } from './config';
 
 // SSL Configuration based on environment
-const sslConfig = SECRETS.nodeEnv === 'production' ? { rejectUnauthorized: true } : { rejectUnauthorized: false };
+// SSL Configuration
+const sslConfig = SECRETS.nodeEnv === 'production' ? { rejectUnauthorized: true } : false;
 
 // Create the pool instance
 const pool = new Pool({
   connectionString: SECRETS.postgresConnectionString,
-  ssl: sslConfig,
+  ssl: sslConfig, // Use 'false' to disable SSL for development
 });
 
 // Function to get a client on demand

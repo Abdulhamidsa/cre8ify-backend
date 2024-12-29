@@ -6,7 +6,8 @@ import { SignInResponse } from '../types/user.types';
 import { getErrorMessage } from '../utils/error.utils';
 
 interface UserPayload {
-  mongo_ref?: string;
+  mongo_ref: string;
+  friendlyId: string;
 }
 
 const createToken = (payload: object, secret: string, expiresIn: string): string => {
@@ -14,15 +15,15 @@ const createToken = (payload: object, secret: string, expiresIn: string): string
 };
 
 export const generateAccessToken = (payload: UserPayload): string => {
-  if (!payload.mongo_ref) {
-    throw new AppError('User ID (mongo_ref) is required to generate access token', 400);
+  if (!payload.mongo_ref || !payload.friendlyId) {
+    throw new AppError('User ID (mongo_ref) and friendlyId are required to generate access token', 400);
   }
   return createToken(payload, SECRETS.jwtSecret || '', SECRETS.accessTokenExpiration || '10m');
 };
 
 export const generateRefreshToken = (payload: UserPayload): string => {
-  if (!payload.mongo_ref) {
-    throw new AppError('User ID (mongo_ref) is required to generate refresh token', 400);
+  if (!payload.mongo_ref || !payload.friendlyId) {
+    throw new AppError('User ID (mongo_ref) and friendlyId are required to generate refresh token', 400);
   }
   return createToken(payload, SECRETS.jwtRefreshSecret || '', SECRETS.refreshTokenExpiration || '1d');
 };
@@ -71,13 +72,13 @@ export const verifyToken = async (token: string, tokenType: 'access' | 'refresh'
   return validateToken(token, secret);
 };
 
-export const generateTokens = async (mongo_ref: string): Promise<SignInResponse> => {
-  if (!mongo_ref) {
-    throw new AppError('Invalid user reference for token generation', 500);
+export const generateTokens = async (mongo_ref: string, friendlyId: string): Promise<SignInResponse> => {
+  if (!mongo_ref || !friendlyId) {
+    throw new AppError('Invalid user reference or friendlyId for token generation', 500);
   }
 
-  const accessToken = generateAccessToken({ mongo_ref });
-  const refreshToken = generateRefreshToken({ mongo_ref });
+  const accessToken = generateAccessToken({ mongo_ref, friendlyId });
+  const refreshToken = generateRefreshToken({ mongo_ref, friendlyId });
 
-  return { accessToken, refreshToken, mongo_ref };
+  return { accessToken, refreshToken, mongo_ref, friendlyId };
 };

@@ -1,5 +1,6 @@
 import { getSQLClient } from '../../common/config/sql-client';
 import { AppError } from '../../common/errors/app.error';
+import { generateFriendlyId } from '../../common/utils/helper';
 import { generateMongoRef, hashPassword } from '../../common/utils/helpers';
 import Logger from '../../common/utils/logger';
 import { saveDocument } from '../../common/utils/mongo.service';
@@ -8,7 +9,7 @@ import { SignUpInput } from '../../common/validation/user.validation';
 import { User } from '../user/models/user.model';
 
 export const signUpUserService = async (data: SignUpInput): Promise<void> => {
-  const { email, password, name, age } = data;
+  const { username, password } = data;
   const sqlClient = await getSQLClient();
 
   try {
@@ -16,7 +17,7 @@ export const signUpUserService = async (data: SignUpInput): Promise<void> => {
     await sqlClient.query('BEGIN');
 
     // Check if the user already exists in MySQL
-    const existingUser = await sqlClient.query(SQL_QUERIES.checkUserExists, [email]);
+    const existingUser = await sqlClient.query(SQL_QUERIES.checkUserExists, [username]);
     if (existingUser.rows.length > 0) {
       throw new AppError('Email already exists', 409);
     }
@@ -24,18 +25,18 @@ export const signUpUserService = async (data: SignUpInput): Promise<void> => {
     // Hash the password and generate a unique Mongo reference
     const hashedPassword = await hashPassword(password);
     const mongoRef = generateMongoRef();
+    const friendlyId = generateFriendlyId(username);
 
     // Insert the user into MySQL
-    const sqlResult = await sqlClient.query(SQL_QUERIES.insertUser, [email, hashedPassword, mongoRef]);
+    const sqlResult = await sqlClient.query(SQL_QUERIES.insertUser, [username, hashedPassword, mongoRef]);
     if (sqlResult.rowCount === 0) {
       throw new AppError('Failed to insert user into MySQL', 500);
     }
 
     // Save additional user details in MongoDB
     const mongoUser = await saveDocument(User, {
-      mongo_ref: mongoRef,
-      name,
-      age,
+      mongoRef: mongoRef,
+      friendlyId: friendlyId,
     });
 
     if (!mongoUser) {

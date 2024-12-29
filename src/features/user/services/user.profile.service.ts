@@ -6,7 +6,7 @@ import { User } from '../models/user.model';
 export const getUserProfileService = async (mongoRef: string): Promise<UserResponse> => {
   try {
     // Fetch the user profile based on mongoRef
-    const user = await User.findOne({ mongo_ref: mongoRef })
+    const user = await User.findOne({ mongoRef: mongoRef })
       .select<UserResponse>('-__v -active -deletedAt')
       .lean<UserResponse>();
 

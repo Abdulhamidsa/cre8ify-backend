@@ -1,19 +1,17 @@
-import { mongo } from 'mongoose';
 import { z } from 'zod';
 
 // Sign-up Schema
 export const signUpSchema = z.object({
   id: z.string().optional(),
-  email: z.string().email('Invalid email format'),
+
+  username: z.string().min(3, 'Username must be at least 3 characters long'),
   password: z.string().min(8, 'Password must be at least 8 characters'),
-  name: z.string().nonempty('Name cannot be empty'),
-  age: z.number().positive('Age must be a positive number'),
 });
 export type SignUpInput = z.infer<typeof signUpSchema>;
 
 // Login Schema
 export const signInSchema = z.object({
-  email: z.string().email('Invalid email format'),
+  username: z.string().email('Invalid email format'),
   password: z.string().min(8, 'Password must be at least 8 characters long'),
 });
 export type SignInInput = z.infer<typeof signInSchema>;
@@ -47,6 +45,7 @@ export const userResponeSchema = z.object({
   _id: z.string(),
   mongo_ref: z.string(),
   name: z.string().optional(),
+
   age: z.number(),
   createdAt: z.string(),
 });

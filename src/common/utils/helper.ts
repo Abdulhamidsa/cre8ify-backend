@@ -1,8 +1,8 @@
 import bcrypt from 'bcryptjs';
-import { customAlphabet } from 'nanoid';
+import { v4 as uuidv4 } from 'uuid';
 
 export const generateFriendlyId = (firstName: string): string => {
-  const shortId = customAlphabet('1234567890abcdefg', 10)();
+  const shortId = uuidv4().split('-')[0]; // Use the first part of the UUID
   return `${firstName.toLowerCase().replace(/\s/g, '-')}-${shortId}`;
 };
 

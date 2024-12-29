@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "target": "ES2020", // Use modern JS features (async/await, etc.)
+    "target": "ES2022", // Use modern JS features (async/await, etc.)
     "module": "CommonJS", // CommonJS for Node.js compatibility
     "outDir": "./dist", // Output directory for compiled files
     "rootDir": "./src", // Root directory for source files
