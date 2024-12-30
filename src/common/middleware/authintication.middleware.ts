@@ -1,12 +1,15 @@
 import { NextFunction, Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
 
+import { User } from '../../models/user.model';
 import { AppError } from '../errors/app.error';
 import { getCookieOptions } from '../utils/cookie.utils';
 import { getErrorMessage } from '../utils/error.utils';
 import { generateAccessToken, verifyToken } from '../utils/jwt';
 import Logger from '../utils/logger';
 import { createResponse } from '../utils/response.handler';
+
+// Assuming you have a User model
 
 export const authenticateAndRefresh = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
@@ -16,7 +19,10 @@ export const authenticateAndRefresh = async (req: Request, res: Response, next: 
     // Check if accessToken is present and valid
     if (accessToken) {
       try {
-        const decoded = jwt.verify(accessToken, process.env.JWT_SECRET as string) as { mongo_ref: string };
+        const decoded = jwt.verify(accessToken, process.env.JWT_SECRET as string) as {
+          mongo_ref: string;
+          friendlyId: string;
+        };
         req.locals = { user: { mongo_ref: decoded.mongo_ref } };
         return next();
       } catch (error) {
@@ -38,7 +44,20 @@ export const authenticateAndRefresh = async (req: Request, res: Response, next: 
     if (!mongoRef) {
       throw new AppError('Invalid refresh token payload', 403);
     }
-    const newAccessToken = generateAccessToken({ mongo_ref: mongoRef });
+
+    // Retrieve friendlyId from the database
+    const mongoUser = await User.findOne({ mongoRef });
+    if (!mongoUser) {
+      throw new AppError('User not found in MongoDB', 500);
+    }
+
+    const friendlyId = mongoUser.friendlyId;
+
+    // Generate a new access token
+    const newAccessToken = generateAccessToken({
+      mongo_ref: mongoRef,
+      friendlyId,
+    });
     const accessTokenOptions = getCookieOptions('access');
     res.cookie('accessToken', newAccessToken, accessTokenOptions);
 

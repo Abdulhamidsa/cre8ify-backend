@@ -11,7 +11,7 @@ export type SignUpInput = z.infer<typeof signUpSchema>;
 
 // Login Schema
 export const signInSchema = z.object({
-  username: z.string().email('Invalid email format'),
+  username: z.string().min(3, 'Username must be at least 3 characters long'),
   password: z.string().min(8, 'Password must be at least 8 characters long'),
 });
 export type SignInInput = z.infer<typeof signInSchema>;
