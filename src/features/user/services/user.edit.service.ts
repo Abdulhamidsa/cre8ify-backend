@@ -1,12 +1,12 @@
 import { AppError } from '../../../common/errors/app.error';
 import Logger from '../../../common/utils/logger';
 import { EditUserInput } from '../../../common/validation/user.validation';
-import { User } from '../models/user.model';
+import { User } from '../../../models/user.model';
 
 export const editUserProfileService = async (mongoRef: string, profileData: EditUserInput): Promise<EditUserInput> => {
   try {
     const updatedUser = await User.findOneAndUpdate(
-      { mongo_ref: mongoRef },
+      { mongoRef: mongoRef },
       { $set: profileData },
       { new: true, lean: true, runValidators: true },
     ).select('-password -active -updatedAt -deletedAt');
