@@ -16,8 +16,8 @@ import {
   handleEditProject,
   handleGetUserProjects,
 } from '../features/project/project.handler';
-import { handleDeleteUser, handleFetchUserProfile } from '../features/user/handlers/user.handler';
-import { handleEditUserProfile } from '../features/user/handlers/user.handler';
+import { handleDeleteUser, handleFetchUserProfile } from '../features/user/user.handler';
+import { handleEditUserProfile } from '../features/user/user.handler';
 
 const router = Router();
 router.use(authenticateAndRefresh, attachUserContext);
