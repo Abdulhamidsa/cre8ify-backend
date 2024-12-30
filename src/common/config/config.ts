@@ -20,6 +20,13 @@ export const SECRETS = {
   dbPoolMin: process.env.DB_POOL_MIN ? parseInt(process.env.DB_POOL_MIN) : 1,
   dbPoolMax: process.env.DB_POOL_MAX ? parseInt(process.env.DB_POOL_MAX) : 5,
   logLevel: process.env.LOG_LEVEL || 'debug',
+  cloudinaryCloudName: process.env.CLOUDINARY_CLOUD_NAME,
+  cloudinaryApiKey: process.env.CLOUDINARY_API_KEY,
+  cloudinaryApiSecret: process.env.CLOUDINARY_API_SECRET,
+  projectImagesFolder: process.env.CLOUDINARY_PROJECT_IMAGES_FOLDER || 'projects/images',
+  projectThumbnailsFolder: process.env.CLOUDINARY_PROJECT_THUMBNAILS_FOLDER || 'projects/thumbnails',
+  imageQuality: 90,
+  thumbnailQuality: 'auto',
   cookieSecure: process.env.COOKIE_SECURE === 'true', // False in development
   cookieHttpOnly: process.env.COOKIE_HTTP_ONLY === 'true',
   cookieSameSite: process.env.COOKIE_SAME_SITE || 'lax', // Less strict in development
