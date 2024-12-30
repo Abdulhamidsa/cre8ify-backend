@@ -26,7 +26,7 @@ export type AddProject = {
   projectUrl: string;
   projectImage: [{ url: string }];
   projectThumbnail?: string;
-  tags: string[];
+  tags: mongoose.Types.ObjectId[];
   createdAt: Date;
   updatedAt: Date;
 };
