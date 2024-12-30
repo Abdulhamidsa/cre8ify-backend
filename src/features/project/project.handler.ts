@@ -7,12 +7,11 @@ import { editProjectService } from './services/project.edit.service';
 import { getUserProjectsService } from './services/project.get.project.service';
 
 export const handleAddProject: RequestHandler = async (req, res, next) => {
-  const mongoRef = res.locals.mongoRef;
+  const mongoRef = res.locals.mongoRef; // Assuming user identity is in res.locals
   const validatedData = req.body;
 
   try {
     const project = await addProjectService(mongoRef, validatedData);
-
     res.status(201).json(createResponse(true, project));
   } catch (error) {
     next(error);
