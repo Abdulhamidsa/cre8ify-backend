@@ -7,7 +7,7 @@ import { rateLimit } from 'express-rate-limit';
 import { SECRETS } from './common/config/config';
 import { corsOptions } from './common/config/cors';
 import { connectMongoDB } from './common/config/mongo.connection';
-import { getSQLClient } from './common/config/sql-client';
+import { ensureTablesExist } from './common/config/sql-client';
 import expressErrorMiddleware from './common/middleware/error.middleware';
 import Logger from './common/utils/logger';
 import routes from './routes';
@@ -41,8 +41,9 @@ app.use(expressErrorMiddleware);
 // Start function
 export const start = async (): Promise<void> => {
   try {
-    await Promise.all([getSQLClient(), connectMongoDB()]);
+    await Promise.all([ensureTablesExist(), connectMongoDB()]);
     Logger.info('Connected to SQL and MongoDB');
+
     app.listen(PORT, () => {
       Logger.info(`Server running at http://localhost:${PORT}`);
     });
