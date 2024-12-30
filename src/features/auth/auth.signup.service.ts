@@ -6,7 +6,7 @@ import Logger from '../../common/utils/logger';
 import { saveDocument } from '../../common/utils/mongo.service';
 import { SQL_QUERIES } from '../../common/utils/sql.constants';
 import { SignUpInput } from '../../common/validation/user.validation';
-import { User } from '../user/models/user.model';
+import { User } from '../../models/user.model';
 
 export const signUpUserService = async (data: SignUpInput): Promise<void> => {
   const { username, password } = data;
