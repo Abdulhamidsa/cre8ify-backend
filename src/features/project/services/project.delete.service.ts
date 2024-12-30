@@ -1,7 +1,7 @@
 import { AppError } from '../../../common/errors/app.error';
 import Logger from '../../../common/utils/logger';
-import { User } from '../../user/models/user.model';
-import { Project } from '../models/projects.model';
+import { Project } from '../../../models/projects.model';
+import { User } from '../../../models/user.model';
 
 export const deleteProjectService = async (mongoRef: string, projectId: string) => {
   try {
