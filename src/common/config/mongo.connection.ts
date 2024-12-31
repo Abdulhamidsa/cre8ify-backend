@@ -10,7 +10,6 @@ export const connectMongoDB = async () => {
     await mongoose.connect(SECRETS.mongoConnectionString, {
       maxPoolSize: 10,
     });
-    console.log('MongoDB connected', SECRETS.mongoConnectionString);
   } catch (error) {
     const errorMessage = getErrorMessage(error);
     Logger.error(`MongoDB connection failed: ${errorMessage}`);

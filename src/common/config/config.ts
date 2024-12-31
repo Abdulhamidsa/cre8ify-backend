@@ -3,7 +3,7 @@ import { config } from 'dotenv';
 config({ path: '.env.dev' });
 
 export const SECRETS = {
-  mongoConnectionString: process.env.MONGO_CONNECTION_STRING || '',
+  mongoConnectionString: process.env.MONGO_CONNECTION_STRING || 'mongodb://localhost:27017/dev_db',
   postgresConnectionString:
     process.env.POSTGRES_CONNECTION_STRING || 'postgresql://postgres:password@localhost:5432/dev_db',
   nodeEnv: process.env.NODE_ENV || 'development',

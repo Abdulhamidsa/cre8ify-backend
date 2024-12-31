@@ -2,7 +2,7 @@ import mongoose, { Document, Schema } from 'mongoose';
 
 interface IUser extends Document {
   mongoRef: string;
-  name: string;
+  username: string;
   age: number;
   friendlyId: string;
   deletedAt: Date | null;
@@ -23,7 +23,7 @@ const UserSchema: Schema<IUser> = new Schema(
       unique: true,
       required: true,
     },
-    name: {
+    username: {
       type: String,
       required: false,
       trim: true,

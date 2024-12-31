@@ -16,7 +16,7 @@ import {
   handleEditProject,
   handleGetUserProjects,
 } from '../features/project/project.handler';
-import { handleDeleteUser, handleFetchUserProfile } from '../features/user/user.handler';
+import { handleDeleteUser, handleFetchUserMinimalInfo, handleFetchUserProfile } from '../features/user/user.handler';
 import { handleEditUserProfile } from '../features/user/user.handler';
 
 const router = Router();
@@ -30,6 +30,7 @@ router.get('/profile/:friendlyId', handleFetchUserProfile);
 router.put('/profile', ValidZod(editUserSchema, 'body'), handleEditUserProfile);
 router.delete('/profile', handleDeleteUser);
 router.post('/signout', signoutHandler);
+router.get('/logged-user', handleFetchUserMinimalInfo);
 
 // ==============================
 //         PROJECT ROUTES

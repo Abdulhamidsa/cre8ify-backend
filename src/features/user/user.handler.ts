@@ -4,6 +4,7 @@ import { createResponse } from '../../common/utils/response.handler';
 import { getAllUsersService } from './services/user.all.service';
 import { deleteUserService } from './services/user.delete.service';
 import { editUserProfileService } from './services/user.edit.service';
+import { getUserMinimalInfoService } from './services/user.minimal.info.service';
 import { getUserProfileService } from './services/user.profile.service';
 
 export const handleFetchAllUsers: RequestHandler = async (_req, res, next): Promise<void> => {
@@ -27,6 +28,17 @@ export const handleFetchUserProfile: RequestHandler = async (_req, res, next) =>
   }
 };
 
+// fetch user minimal profile
+
+export const handleFetchUserMinimalInfo: RequestHandler = async (_req, res, next) => {
+  const mongoRef = res.locals.mongoRef;
+  try {
+    const user = await getUserMinimalInfoService(mongoRef);
+    res.status(200).json(createResponse(true, user));
+  } catch (error) {
+    next(error);
+  }
+};
 // edit user profile
 
 export const handleEditUserProfile: RequestHandler = async (req, res, next): Promise<void> => {

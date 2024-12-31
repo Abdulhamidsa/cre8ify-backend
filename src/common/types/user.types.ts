@@ -33,6 +33,7 @@ export type IPersonalInfo = {
 
 export type UserType = {
   friendlyId: string;
+
   personalInfo: IPersonalInfo;
   userRole: string;
   profilePicture: string;

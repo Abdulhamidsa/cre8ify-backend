@@ -9,7 +9,7 @@ import { SignUpInput } from '../../common/validation/user.validation';
 import { User } from '../../models/user.model';
 
 export const signUpUserService = async (data: SignUpInput): Promise<void> => {
-  const { username, password } = data;
+  const { username, password, email } = data;
   const sqlClient = await getSQLClient();
 
   try {
@@ -17,7 +17,7 @@ export const signUpUserService = async (data: SignUpInput): Promise<void> => {
     await sqlClient.query('BEGIN');
 
     // Check if the user already exists in MySQL
-    const existingUser = await sqlClient.query(SQL_QUERIES.checkUserExists, [username]);
+    const existingUser = await sqlClient.query(SQL_QUERIES.checkEmailexist, [email]);
     if (existingUser.rows.length > 0) {
       throw new AppError('Email already exists', 409);
     }
@@ -28,7 +28,7 @@ export const signUpUserService = async (data: SignUpInput): Promise<void> => {
     const friendlyId = generateFriendlyId(username);
 
     // Insert the user into MySQL
-    const sqlResult = await sqlClient.query(SQL_QUERIES.insertUser, [username, hashedPassword, mongoRef]);
+    const sqlResult = await sqlClient.query(SQL_QUERIES.insertUser, [email, hashedPassword, mongoRef]);
     if (sqlResult.rowCount === 0) {
       throw new AppError('Failed to insert user into MySQL', 500);
     }
@@ -37,6 +37,7 @@ export const signUpUserService = async (data: SignUpInput): Promise<void> => {
     const mongoUser = await saveDocument(User, {
       mongoRef: mongoRef,
       friendlyId: friendlyId,
+      username: username,
     });
 
     if (!mongoUser) {

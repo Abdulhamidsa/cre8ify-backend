@@ -2,7 +2,6 @@ import { Pool, PoolClient } from 'pg';
 
 import { AppError } from '../errors/app.error';
 import { getErrorMessage } from '../utils/error.utils';
-import Logger from '../utils/logger';
 import { SQL_QUERIES } from '../utils/sql.constants';
 import { SECRETS } from './config';
 
@@ -32,14 +31,11 @@ export const ensureTablesExist = async (): Promise<void> => {
   const tableQueries = [SQL_QUERIES.createUsersTable];
 
   try {
-    Logger.info('Ensuring database tables exist...');
     for (const query of tableQueries) {
       await sqlClient.query(query);
     }
-    Logger.info('All necessary tables are ensured.');
   } catch (error) {
-    Logger.error('Error ensuring tables exist:', error);
-    throw new AppError('Database initialization failed', 500);
+    throw new AppError(getErrorMessage(error), 500);
   } finally {
     sqlClient.release();
   }

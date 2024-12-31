@@ -12,7 +12,7 @@ import { SignInInput } from '../../common/validation/user.validation';
 import { User } from '../../models/user.model';
 
 export const signInUser = async (data: SignInInput): Promise<ApiResponse<SignInResponse>> => {
-  const { username, password } = data;
+  const { email, password } = data;
   const sqlClient = await getSQLClient();
 
   try {
@@ -23,16 +23,16 @@ export const signInUser = async (data: SignInInput): Promise<ApiResponse<SignInR
     await ensureTablesExist();
 
     // Log the sign-in attempt
-    Logger.info(`Sign-in attempt for username: ${username}`);
+    Logger.info(`Sign-in attempt for email: ${email}`);
 
     // Use the transaction utility for SQL operations
     await withTransaction(sqlClient, async () => {
       // Verify the user in PostgreSQL
-      const result = await sqlClient.query(SQL_QUERIES.getUserLogin, [username]);
+      const result = await sqlClient.query(SQL_QUERIES.getUserLogin, [email]);
       const user = result.rows[0];
       if (!user) {
         // Use a generic error message to avoid exposing details
-        throw new AppError('Invalid username or password', 400);
+        throw new AppError('Invalid email or password', 400);
       }
 
       const { password_hash, mongo_ref } = user;
@@ -41,7 +41,7 @@ export const signInUser = async (data: SignInInput): Promise<ApiResponse<SignInR
       // Validate the password
       const isPasswordValid = await bcrypt.compare(password, password_hash);
       if (!isPasswordValid) {
-        throw new AppError('Invalid username or password', 400);
+        throw new AppError('Invalid email or password', 400);
       }
     });
 
@@ -62,7 +62,7 @@ export const signInUser = async (data: SignInInput): Promise<ApiResponse<SignInR
 
     return createResponse(true, { mongo_ref: mongoRef, friendlyId, accessToken, refreshToken });
   } catch (error) {
-    Logger.error(`Error during user sign-in for username: ${username}, Error: ${(error as Error).message}`);
+    Logger.error(`Error during user sign-in for email: ${email}, Error: ${(error as Error).message}`);
     throw error;
   } finally {
     sqlClient.release();

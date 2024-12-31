@@ -7,7 +7,7 @@ export const getUserProfileService = async (mongoRef: string): Promise<UserRespo
   try {
     // Fetch the user profile based on mongoRef
     const user = await User.findOne({ mongoRef: mongoRef })
-      .select<UserResponse>('-__v -active -deletedAt')
+      .select<UserResponse>('-__v -active -deletedAt -_id -mongoRef')
       .lean<UserResponse>();
 
     if (!user) {
