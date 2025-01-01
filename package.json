@@ -5,9 +5,9 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "prebuild": "rimraf dist",
+    "clean": "rimraf dist",
     "build": "tsc",
-    "start": "pnpm run build && node dist/index.js",
+    "start": "pnpm node dist/index.js",
     "dev": "ts-node-dev --respawn --transpile-only src/index.ts",
     "serve": "pnpm run start",
     "format": "prettier --write .",
