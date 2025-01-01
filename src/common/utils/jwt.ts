@@ -1,9 +1,9 @@
 import jwt, { JsonWebTokenError, JwtPayload } from 'jsonwebtoken';
 
-import { SECRETS } from '../config/config';
-import { AppError } from '../errors/app.error';
-import { SignInResponse } from '../types/user.types';
-import { getErrorMessage } from '../utils/error.utils';
+import { SECRETS } from '../config/config.js';
+import { AppError } from '../errors/app.error.js';
+import { SignInResponse } from '../types/user.types.js';
+import { getErrorMessage } from '../utils/error.utils.js';
 
 interface UserPayload {
   mongo_ref: string;

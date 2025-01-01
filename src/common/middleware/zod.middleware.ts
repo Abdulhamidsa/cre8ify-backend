@@ -1,7 +1,7 @@
 import { NextFunction, Request, RequestHandler, Response } from 'express';
 import { ZodError, ZodSchema } from 'zod';
 
-import { AppError } from '../errors/app.error';
+import { AppError } from '../errors/app.error.js';
 
 export const ValidZod = (schema: ZodSchema, source: 'body' | 'query' | 'params' = 'body'): RequestHandler => {
   if (!schema || typeof schema.parse !== 'function') {

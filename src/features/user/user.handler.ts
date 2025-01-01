@@ -1,11 +1,11 @@
 import { RequestHandler } from 'express';
 
-import { createResponse } from '../../common/utils/response.handler';
-import { getAllUsersService } from './services/user.all.service';
-import { deleteUserService } from './services/user.delete.service';
-import { editUserProfileService } from './services/user.edit.service';
-import { getUserMinimalInfoService } from './services/user.minimal.info.service';
-import { getUserProfileService } from './services/user.profile.service';
+import { createResponse } from '../../common/utils/response.handler.js';
+import { getAllUsersService } from './services/user.all.service.js';
+import { deleteUserService } from './services/user.delete.service.js';
+import { editUserProfileService } from './services/user.edit.service.js';
+import { getUserMinimalInfoService } from './services/user.minimal.info.service.js';
+import { getUserProfileService } from './services/user.profile.service.js';
 
 export const handleFetchAllUsers: RequestHandler = async (_req, res, next): Promise<void> => {
   try {

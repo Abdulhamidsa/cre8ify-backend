@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 import { z } from 'zod';
 
-import { signInSchema, signUpSchema } from '../../common/validation/user.validation';
+import { signInSchema, signUpSchema } from '../../common/validation/user.validation.js';
 
 export type SignUpInput = z.infer<typeof signUpSchema>;
 export type LoginInput = z.infer<typeof signInSchema>;

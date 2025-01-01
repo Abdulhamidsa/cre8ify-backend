@@ -1,6 +1,6 @@
 // import mongoose from "mongoose";
-import Links from '../data/constants/links';
-import Professions from '../data/constants/proffesions';
+import Links from '../data/constants/links.js';
+import Professions from '../data/constants/proffesions.js';
 
 type ILink = {
   name: keyof typeof Links;

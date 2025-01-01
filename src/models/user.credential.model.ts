@@ -1,6 +1,6 @@
 // import mongoose, { Model, Schema } from 'mongoose';
 
-// import { IUserCredential } from '../../../common/types/user.types';
+// import { IUserCredential } from '../../../common/types/user.types.js';
 
 // const userCredentialSchema: Schema<IUserCredential> = new Schema({
 //   email: {

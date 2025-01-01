@@ -1,15 +1,15 @@
 import { RequestHandler } from 'express';
 
-import { AppError } from '../../common/errors/app.error';
-import { getCookieOptions } from '../../common/utils/cookie.utils';
+import { AppError } from '../../common/errors/app.error.js';
+import { getCookieOptions } from '../../common/utils/cookie.utils.js';
 // signout handler
 
-import { verifyToken } from '../../common/utils/jwt';
-import { createResponse } from '../../common/utils/response.handler';
-import { SignInInput, SignUpInput } from '../../common/validation/user.validation';
-import { signInUser } from './auth.signin.service';
-import { signUpUserService } from './auth.signup.service';
-import { refreshTokenService } from './refresh.token.service';
+import { verifyToken } from '../../common/utils/jwt.js';
+import { createResponse } from '../../common/utils/response.handler.js';
+import { SignInInput, SignUpInput } from '../../common/validation/user.validation.js';
+import { signInUser } from './auth.signin.service.js';
+import { signUpUserService } from './auth.signup.service.js';
+import { refreshTokenService } from './refresh.token.service.js';
 
 // signup handlerclear
 

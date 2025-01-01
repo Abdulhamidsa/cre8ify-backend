@@ -1,7 +1,7 @@
 // import { Request, Response, NextFunction } from "express";
-// import { getSuccessResponse, getErrorResponse } from "../../common/utils/response.handler";
-// import { signUpUser } from "./auth.service";
-// import { verifyToken } from "../../common/utils/jwt";
+// import { getSuccessResponse, getErrorResponse } from '../../common/utils/response.handler.js';
+// import { signUpUser } from './auth.service.js';
+// import { verifyToken } from '../../common/utils/jwt.js';
 
 // // Define the request body interfaces
 // interface SignupRequestBody {

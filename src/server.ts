@@ -4,13 +4,13 @@ import cors from 'cors';
 import express, { Request, Response } from 'express';
 import { rateLimit } from 'express-rate-limit';
 
-import { SECRETS } from './common/config/config';
-import { corsOptions } from './common/config/cors';
-import { connectMongoDB } from './common/config/mongo.connection';
-import { ensureTablesExist } from './common/config/sql-client';
-import expressErrorMiddleware from './common/middleware/error.middleware';
-import Logger from './common/utils/logger';
-import routes from './routes';
+import { SECRETS } from './common/config/config.js';
+import { corsOptions } from './common/config/cors.js';
+import { connectMongoDB } from './common/config/mongo.connection.js';
+import { ensureTablesExist } from './common/config/sql-client.js';
+import expressErrorMiddleware from './common/middleware/error.middleware.js';
+import Logger from './common/utils/logger.js';
+import routes from './routes/index.js';
 
 const app = express();
 const PORT = SECRETS.port;

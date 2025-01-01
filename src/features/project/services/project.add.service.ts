@@ -1,10 +1,10 @@
-import { AppError } from '../../../common/errors/app.error';
-import cloudinary from '../../../common/utils/cloudinary.config';
-import Logger from '../../../common/utils/logger';
-import { ProjectInput } from '../../../common/validation/project.validation';
-import { Project } from '../../../models/projects.model';
-import { Tag } from '../../../models/tag.model';
-import { User } from '../../../models/user.model';
+import { AppError } from '../../../common/errors/app.error.js';
+import cloudinary from '../../../common/utils/cloudinary.config.js';
+import Logger from '../../../common/utils/logger.js';
+import { ProjectInput } from '../../../common/validation/project.validation.js';
+import { Project } from '../../../models/projects.model.js';
+import { Tag } from '../../../models/tag.model.js';
+import { User } from '../../../models/user.model.js';
 
 export const addProjectService = async (mongoRef: string, projectData: ProjectInput): Promise<ProjectInput> => {
   try {

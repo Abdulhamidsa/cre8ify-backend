@@ -1,13 +1,13 @@
 import { NextFunction, Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
 
-import { User } from '../../models/user.model';
-import { AppError } from '../errors/app.error';
-import { getCookieOptions } from '../utils/cookie.utils';
-import { getErrorMessage } from '../utils/error.utils';
-import { generateAccessToken, verifyToken } from '../utils/jwt';
-import Logger from '../utils/logger';
-import { createResponse } from '../utils/response.handler';
+import { User } from '../../models/user.model.js';
+import { AppError } from '../errors/app.error.js';
+import { getCookieOptions } from '../utils/cookie.utils.js';
+import { getErrorMessage } from '../utils/error.utils.js';
+import { generateAccessToken, verifyToken } from '../utils/jwt.js';
+import Logger from '../utils/logger.js';
+import { createResponse } from '../utils/response.handler.js';
 
 // Assuming you have a User model
 

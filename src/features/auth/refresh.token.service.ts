@@ -1,6 +1,6 @@
-import { AppError } from '../../common/errors/app.error';
-import { verifyToken } from '../../common/utils/jwt';
-import Logger from '../../common/utils/logger';
+import { AppError } from '../../common/errors/app.error.js';
+import { verifyToken } from '../../common/utils/jwt.js';
+import Logger from '../../common/utils/logger.js';
 
 export const refreshTokenService = async (refreshToken: string): Promise<void> => {
   if (!refreshToken) {

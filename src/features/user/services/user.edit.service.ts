@@ -1,7 +1,7 @@
-import { AppError } from '../../../common/errors/app.error';
-import Logger from '../../../common/utils/logger';
-import { EditUserInput } from '../../../common/validation/user.validation';
-import { User } from '../../../models/user.model';
+import { AppError } from '../../../common/errors/app.error.js';
+import Logger from '../../../common/utils/logger.js';
+import { EditUserInput } from '../../../common/validation/user.validation.js';
+import { User } from '../../../models/user.model.js';
 
 export const editUserProfileService = async (mongoRef: string, profileData: EditUserInput): Promise<EditUserInput> => {
   try {

@@ -1,23 +1,23 @@
 import { Router } from 'express';
 
-import { attachUserContext } from '../common/middleware/attach.user.context';
-import { authenticateAndRefresh } from '../common/middleware/authintication.middleware';
-import { ValidZod } from '../common/middleware/zod.middleware';
+import { attachUserContext } from '../common/middleware/attach.user.context.js';
+import { authenticateAndRefresh } from '../common/middleware/authintication.middleware.js';
+import { ValidZod } from '../common/middleware/zod.middleware.js';
 import {
   editProjectValidationSchema,
   projectIdValidationSchema,
   projectValidationSchema,
-} from '../common/validation/project.validation';
-import { editUserSchema } from '../common/validation/user.validation';
-import { signoutHandler } from '../features/auth/auth.handlers';
+} from '../common/validation/project.validation.js';
+import { editUserSchema } from '../common/validation/user.validation.js';
+import { signoutHandler } from '../features/auth/auth.handlers.js';
 import {
   handleAddProject,
   handleDeleteProject,
   handleEditProject,
   handleGetUserProjects,
-} from '../features/project/project.handler';
-import { handleDeleteUser, handleFetchUserMinimalInfo, handleFetchUserProfile } from '../features/user/user.handler';
-import { handleEditUserProfile } from '../features/user/user.handler';
+} from '../features/project/project.handler.js';
+import { handleDeleteUser, handleFetchUserMinimalInfo, handleFetchUserProfile } from '../features/user/user.handler.js';
+import { handleEditUserProfile } from '../features/user/user.handler.js';
 
 const router = Router();
 router.use(authenticateAndRefresh, attachUserContext);

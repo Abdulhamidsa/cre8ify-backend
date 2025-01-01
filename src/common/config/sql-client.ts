@@ -1,9 +1,12 @@
-import { Pool, PoolClient } from 'pg';
+import pkg from 'pg';
+import { PoolClient } from 'pg';
 
-import { AppError } from '../errors/app.error';
-import { getErrorMessage } from '../utils/error.utils';
-import { SQL_QUERIES } from '../utils/sql.constants';
-import { SECRETS } from './config';
+import { AppError } from '../errors/app.error.js';
+import { getErrorMessage } from '../utils/error.utils.js';
+import { SQL_QUERIES } from '../utils/sql.constants.js';
+import { SECRETS } from './config.js';
+
+const { Pool } = pkg;
 
 // SSL Configuration based on environment
 const sslConfig = SECRETS.nodeEnv === 'production' ? { rejectUnauthorized: true } : false;

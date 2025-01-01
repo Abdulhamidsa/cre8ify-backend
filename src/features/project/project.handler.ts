@@ -1,10 +1,10 @@
 import { RequestHandler } from 'express';
 
-import { createResponse } from '../../common/utils/response.handler';
-import { addProjectService } from './services/project.add.service';
-import { deleteProjectService } from './services/project.delete.service';
-import { editProjectService } from './services/project.edit.service';
-import { getUserProjectsService } from './services/project.get.project.service';
+import { createResponse } from '../../common/utils/response.handler.js';
+import { addProjectService } from './services/project.add.service.js';
+import { deleteProjectService } from './services/project.delete.service.js';
+import { editProjectService } from './services/project.edit.service.js';
+import { getUserProjectsService } from './services/project.get.project.service.js';
 
 export const handleAddProject: RequestHandler = async (req, res, next) => {
   const mongoRef = res.locals.mongoRef; // Assuming user identity is in res.locals

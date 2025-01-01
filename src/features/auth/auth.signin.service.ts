@@ -1,15 +1,15 @@
 import bcrypt from 'bcrypt';
 
-import { ensureTablesExist, getSQLClient } from '../../common/config/sql-client';
-import { AppError } from '../../common/errors/app.error';
-import { SignInResponse } from '../../common/types/user.types';
-import { generateTokens } from '../../common/utils/jwt';
-import Logger from '../../common/utils/logger';
-import { ApiResponse, createResponse } from '../../common/utils/response.handler';
-import { SQL_QUERIES } from '../../common/utils/sql.constants';
-import { withTransaction } from '../../common/utils/transaction.helper';
-import { SignInInput } from '../../common/validation/user.validation';
-import { User } from '../../models/user.model';
+import { ensureTablesExist, getSQLClient } from '../../common/config/sql-client.js';
+import { AppError } from '../../common/errors/app.error.js';
+import { SignInResponse } from '../../common/types/user.types.js';
+import { generateTokens } from '../../common/utils/jwt.js';
+import Logger from '../../common/utils/logger.js';
+import { ApiResponse, createResponse } from '../../common/utils/response.handler.js';
+import { SQL_QUERIES } from '../../common/utils/sql.constants.js';
+import { withTransaction } from '../../common/utils/transaction.helper.js';
+import { SignInInput } from '../../common/validation/user.validation.js';
+import { User } from '../../models/user.model.js';
 
 export const signInUser = async (data: SignInInput): Promise<ApiResponse<SignInResponse>> => {
   const { email, password } = data;

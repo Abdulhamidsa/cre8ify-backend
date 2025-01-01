@@ -1,13 +1,13 @@
 import { Router } from 'express';
 
-import { authenticateAndRefresh } from '../common/middleware/authintication.middleware';
-import { ValidZod } from '../common/middleware/zod.middleware';
-import { createResponse } from '../common/utils/response.handler';
-// import { projectValidationSchema } from '../common/validation/project.validation';
-import { signInSchema, signUpSchema } from '../common/validation/user.validation';
-import { refreshTokenHandler, signInHandler, signupHandler } from '../features/auth/auth.handlers';
-// import { handleAddProject } from '../features/project/project.handler';
-import { handleFetchAllUsers } from '../features/user/user.handler';
+import { authenticateAndRefresh } from '../common/middleware/authintication.middleware.js';
+import { ValidZod } from '../common/middleware/zod.middleware.js';
+import { createResponse } from '../common/utils/response.handler.js';
+// import { projectValidationSchema } from '../common/validation/project.validation.js';
+import { signInSchema, signUpSchema } from '../common/validation/user.validation.js';
+import { refreshTokenHandler, signInHandler, signupHandler } from '../features/auth/auth.handlers.js';
+// import { handleAddProject } from '../features/project/project.handler.js';
+import { handleFetchAllUsers } from '../features/user/user.handler.js';
 
 const router = Router();
 

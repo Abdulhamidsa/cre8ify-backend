@@ -1,6 +1,6 @@
-import { AppError } from '../../../common/errors/app.error';
-import Logger from '../../../common/utils/logger';
-import { Tag } from '../../../models/tag.model';
+import { AppError } from '../../../common/errors/app.error.js';
+import Logger from '../../../common/utils/logger.js';
+import { Tag } from '../../../models/tag.model.js';
 
 export const addTagsService = async (tagNames: string[]): Promise<string[]> => {
   try {

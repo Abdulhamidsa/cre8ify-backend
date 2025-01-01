@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 
-import { AppError } from '../errors/app.error';
+import { AppError } from '../errors/app.error.js';
 
 export const attachUserContext = (req: Request, res: Response, next: NextFunction): void => {
   const mongoRef = req.locals?.user?.mongo_ref;

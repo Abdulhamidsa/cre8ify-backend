@@ -1,5 +1,5 @@
 // import { Router } from "express";
-// import { handleFetchAllProjects } from "../handlers/project.handler";
+// import { handleFetchAllProjects } from '../handlers/project.handler.js';
 
 // const router = Router();
 

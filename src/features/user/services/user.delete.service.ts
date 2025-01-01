@@ -1,8 +1,8 @@
-import { getSQLClient } from '../../../common/config/sql-client';
-import { AppError } from '../../../common/errors/app.error';
-import Logger from '../../../common/utils/logger';
-import { SQL_QUERIES } from '../../../common/utils/sql.constants';
-import { User } from '../../../models/user.model';
+import { getSQLClient } from '../../../common/config/sql-client.js';
+import { AppError } from '../../../common/errors/app.error.js';
+import Logger from '../../../common/utils/logger.js';
+import { SQL_QUERIES } from '../../../common/utils/sql.constants.js';
+import { User } from '../../../models/user.model.js';
 
 export const deleteUserService = async (mongoRef: string): Promise<void> => {
   const sqlClient = await getSQLClient();

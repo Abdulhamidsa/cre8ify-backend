@@ -1,6 +1,6 @@
-import { AppError } from '../../../common/errors/app.error';
-import Logger from '../../../common/utils/logger';
-import { User } from '../../../models/user.model';
+import { AppError } from '../../../common/errors/app.error.js';
+import Logger from '../../../common/utils/logger.js';
+import { User } from '../../../models/user.model.js';
 
 interface UserMinimalInfo {
   name: string;
