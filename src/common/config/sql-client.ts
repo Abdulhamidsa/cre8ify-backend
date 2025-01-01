@@ -8,8 +8,11 @@ import { SECRETS } from './config.js';
 
 const { Pool } = pkg;
 
-// SSL Configuration based on environment
-const sslConfig = SECRETS.nodeEnv === 'production' ? { rejectUnauthorized: true } : false;
+// SSL Configuration based on environment and Railway behavior
+const sslConfig =
+  SECRETS.nodeEnv === 'production'
+    ? { rejectUnauthorized: false } // Allow Railway's SSL cert
+    : false;
 
 // Create the pool instance
 const pool = new Pool({
