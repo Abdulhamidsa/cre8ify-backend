@@ -9,7 +9,7 @@ export const editUserProfileService = async (mongoRef: string, profileData: Edit
       { mongoRef: mongoRef },
       { $set: profileData },
       { new: true, lean: true, runValidators: true },
-    ).select('-password -active -updatedAt -deletedAt');
+    ).select('-password -active -updatedAt -deletedAt -mongoRef -_id');
 
     if (!updatedUser) {
       throw new AppError('User not found', 404);

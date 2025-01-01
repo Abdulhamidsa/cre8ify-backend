@@ -3,12 +3,13 @@ import mongoose, { Document, Schema } from 'mongoose';
 interface IUser extends Document {
   mongoRef: string;
   username: string;
-  age: number;
+  birthYear: number;
   bio: string;
   country: string;
   profession: string;
   friendlyId: string;
   deletedAt: Date | null;
+  profilePicture: string;
   active: boolean;
   createdAt: Date;
   updatedAt: Date;
@@ -39,11 +40,16 @@ const UserSchema: Schema<IUser> = new Schema(
       required: false,
       trim: true,
     },
+    profilePicture: {
+      type: String,
+      required: false,
+    },
+
     profession: {
       type: String,
       required: false,
     },
-    age: {
+    birthYear: {
       type: Number,
       required: false,
     },

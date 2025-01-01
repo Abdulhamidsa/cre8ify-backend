@@ -1,16 +1,16 @@
-import mongoose, { Model, Schema } from 'mongoose';
+// import mongoose, { Model, Schema } from 'mongoose';
 
-import { IUserCredential } from '../../../common/types/user.types';
+// import { IUserCredential } from '../../../common/types/user.types';
 
-const userCredentialSchema: Schema<IUserCredential> = new Schema({
-  email: {
-    type: String,
-    unique: true,
-  },
+// const userCredentialSchema: Schema<IUserCredential> = new Schema({
+//   email: {
+//     type: String,
+//     unique: true,
+//   },
 
-  password: {
-    type: String,
-    trim: true,
-  },
-});
-export const Credential: Model<IUserCredential> = mongoose.model<IUserCredential>('Credential', userCredentialSchema);
+//   password: {
+//     type: String,
+//     trim: true,
+//   },
+// });
+// export const Credential: Model<IUserCredential> = mongoose.model<IUserCredential>('Credential', userCredentialSchema);

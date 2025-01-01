@@ -4,7 +4,7 @@ import { SECRETS } from '../config/config';
 
 export const getCookieOptions = (tokenType: 'access' | 'refresh'): CookieOptions => {
   const commonOptions: CookieOptions = {
-    httpOnly: false,
+    httpOnly: true,
     secure: SECRETS.nodeEnv === 'production',
     sameSite: 'strict',
   };

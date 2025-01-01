@@ -15,7 +15,7 @@ import { refreshTokenService } from './refresh.token.service';
 
 export const signupHandler: RequestHandler = async (req, res, next): Promise<void> => {
   try {
-    const input: SignUpInput = req.body; // Validate input with middleware or custom validation
+    const input: SignUpInput = req.body;
     await signUpUserService(input);
     res.status(201).json(createResponse(true, { message: 'User created successfully' }));
   } catch (error) {

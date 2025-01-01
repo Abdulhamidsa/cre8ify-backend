@@ -9,7 +9,7 @@ import { SignUpInput } from '../../common/validation/user.validation';
 import { User } from '../../models/user.model';
 
 export const signUpUserService = async (data: SignUpInput): Promise<void> => {
-  const { username, password, email } = data;
+  const { username, password, email, birthYear, bio, profilePicture, country, profession } = data;
   const sqlClient = await getSQLClient();
 
   try {
@@ -25,7 +25,7 @@ export const signUpUserService = async (data: SignUpInput): Promise<void> => {
     // Hash the password and generate a unique Mongo reference
     const hashedPassword = await hashPassword(password);
     const mongoRef = generateMongoRef();
-    const friendlyId = generateFriendlyId(username);
+    const friendlyId = generateFriendlyId(username || '');
 
     // Insert the user into MySQL
     const sqlResult = await sqlClient.query(SQL_QUERIES.insertUser, [email, hashedPassword, mongoRef]);
@@ -37,7 +37,12 @@ export const signUpUserService = async (data: SignUpInput): Promise<void> => {
     const mongoUser = await saveDocument(User, {
       mongoRef: mongoRef,
       friendlyId: friendlyId,
-      username: username,
+      username: username || '',
+      birthYear: birthYear || 0,
+      bio: bio || '',
+      profilePicture: profilePicture || '',
+      country: country || '',
+      profession: profession || '',
     });
 
     if (!mongoUser) {
