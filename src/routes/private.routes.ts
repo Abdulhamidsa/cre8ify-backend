@@ -29,8 +29,8 @@ router.use(authenticateAndRefresh, attachUserContext);
 router.get('/profile/:friendlyId', handleFetchUserProfile);
 router.put('/profile', ValidZod(editUserSchema, 'body'), handleEditUserProfile);
 router.delete('/profile', handleDeleteUser);
-router.post('/signout', signoutHandler);
 router.get('/logged-user', handleFetchUserMinimalInfo);
+router.post('/signout', signoutHandler);
 
 // ==============================
 //         PROJECT ROUTES

@@ -4,6 +4,9 @@ interface IUser extends Document {
   mongoRef: string;
   username: string;
   age: number;
+  bio: string;
+  country: string;
+  profession: string;
   friendlyId: string;
   deletedAt: Date | null;
   active: boolean;
@@ -18,6 +21,14 @@ const UserSchema: Schema<IUser> = new Schema(
       unique: true,
       required: true,
     },
+    bio: {
+      type: String,
+      required: false,
+    },
+    country: {
+      type: String,
+      required: false,
+    },
     friendlyId: {
       type: String,
       unique: true,
@@ -27,6 +38,10 @@ const UserSchema: Schema<IUser> = new Schema(
       type: String,
       required: false,
       trim: true,
+    },
+    profession: {
+      type: String,
+      required: false,
     },
     age: {
       type: Number,

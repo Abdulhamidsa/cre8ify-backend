@@ -1,8 +1,8 @@
 import { AppError } from '../../common/errors/app.error';
-import { generateAccessToken, verifyToken } from '../../common/utils/jwt';
+import { verifyToken } from '../../common/utils/jwt';
 import Logger from '../../common/utils/logger';
 
-export const refreshTokenService = async (refreshToken: string): Promise<{ accessToken: string }> => {
+export const refreshTokenService = async (refreshToken: string): Promise<void> => {
   if (!refreshToken) {
     throw new AppError('Refresh token is required', 401);
   }
@@ -15,10 +15,14 @@ export const refreshTokenService = async (refreshToken: string): Promise<{ acces
       throw new AppError('Invalid refresh token payload', 403);
     }
 
-    const newAccessToken = generateAccessToken({ mongo_ref: mongoRef });
-    return { accessToken: newAccessToken };
+    // Check if access token is present
+    if (!decoded.accessToken) {
+      throw new AppError('Unauthorized', 401);
+    }
+
+    Logger.info('Access token is present');
   } catch (error) {
-    Logger.info('Error refreshing token:', error);
-    throw new AppError('An unexpected error occurred while refreshing token', 500);
+    Logger.info('Error verifying token:', error);
+    throw new AppError('An unexpected error occurred while verifying token', 500);
   }
 };

@@ -24,10 +24,12 @@ export type RefreshTokenInput = z.infer<typeof refreshTokenSchema>;
 
 // edit user schema
 export const editUserSchema = z.object({
-  name: z.string().min(1, 'Name cannot be empty').optional(),
+  username: z.string().min(1, 'Name cannot be empty').optional(),
   age: z.number().positive('Age must be a positive number').optional(),
   bio: z.string().max(500, 'Bio must not exceed 500 characters').optional(),
   profilePicture: z.string().url('Invalid URL format').optional(),
+  country: z.string().optional(),
+  profession: z.string().optional(),
 });
 export type EditUserInput = z.infer<typeof editUserSchema>;
 
@@ -38,6 +40,7 @@ export const userSchema = z.object({
   age: z.number(),
   bio: z.string().optional(),
   profilePicture: z.string().optional(),
+  country: z.string().optional(),
 });
 export type User = z.infer<typeof userSchema>;
 
