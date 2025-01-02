@@ -9,9 +9,11 @@ const colors = {
 };
 
 class Logger {
+  private static logFilePath = process.env.LOG_FILE_PATH || 'app.log'; // Use environment variable for log file
+
   private static logToFile(level: string, message: string): void {
     const logMessage = `[${new Date().toISOString()}] [${level.toUpperCase()}]: ${message}\n`;
-    fs.appendFileSync('app.log', logMessage); // Appends logs to `app.log` in the root directory
+    fs.appendFileSync(this.logFilePath, logMessage); // Appends logs to file
   }
 
   private static getColor(level: string): string {
@@ -29,11 +31,26 @@ class Logger {
     }
   }
 
+  private static formatMessage(messages: unknown[]): string {
+    return messages
+      .map((msg) => {
+        if (msg instanceof Error) {
+          return `${msg.message}\nStack: ${msg.stack}`;
+        }
+        if (typeof msg === 'object') {
+          return JSON.stringify(msg, null, 2);
+        }
+        return String(msg);
+      })
+      .join(' ');
+  }
+
   static log(level: string, ...messages: unknown[]): void {
     const color = this.getColor(level);
-    const message = messages.join(' ');
-    console.log(`${color}[${level.toUpperCase()}]: ${message}${colors.reset}`);
-    this.logToFile(level, message); // Logs to file
+    const formattedMessage = this.formatMessage(messages);
+
+    console.log(`${color}[${level.toUpperCase()}]: ${formattedMessage}${colors.reset}`);
+    this.logToFile(level, formattedMessage);
   }
 
   static info(...messages: unknown[]): void {
