@@ -9,7 +9,7 @@ import { SignUpInput } from '../../common/validation/user.validation.js';
 import { User } from '../../models/user.model.js';
 
 export const signUpUserService = async (data: SignUpInput): Promise<void> => {
-  const { username, password, email, birthYear, bio, profilePicture, country, profession } = data;
+  const { username, password, email, age, bio, profilePicture, countryOrigin, profession, coverImage } = data;
   const sqlClient = await getSQLClient();
 
   try {
@@ -38,10 +38,11 @@ export const signUpUserService = async (data: SignUpInput): Promise<void> => {
       mongoRef: mongoRef,
       friendlyId: friendlyId,
       username: username || '',
-      birthYear: birthYear || 0,
+      age: age || 0,
       bio: bio || '',
-      profilePicture: profilePicture || '',
-      country: country || '',
+      profilePicture: profilePicture || undefined,
+      coverImage: coverImage || undefined,
+      countryOrigin: countryOrigin || '',
       profession: profession || '',
     });
 
