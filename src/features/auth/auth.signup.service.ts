@@ -13,6 +13,9 @@ export const signUpUserService = async (data: SignUpInput): Promise<void> => {
   const sqlClient = await getSQLClient();
 
   try {
+    // Create the users table if it doesn't exist
+    await sqlClient.query(SQL_QUERIES.createUsersTable);
+
     // Begin MySQL transaction
     await sqlClient.query('BEGIN');
 
@@ -38,10 +41,10 @@ export const signUpUserService = async (data: SignUpInput): Promise<void> => {
       mongoRef: mongoRef,
       friendlyId: friendlyId,
       username: username || '',
-      age: age || 0,
+      age: age !== undefined ? age : null,
       bio: bio || '',
-      profilePicture: profilePicture || undefined,
-      coverImage: coverImage || undefined,
+      profilePicture: profilePicture || '',
+      coverImage: coverImage || '',
       countryOrigin: countryOrigin || '',
       profession: profession || '',
     });
