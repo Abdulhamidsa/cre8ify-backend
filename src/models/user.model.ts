@@ -3,14 +3,19 @@ import mongoose, { Document, Schema } from 'mongoose';
 interface IUser extends Document {
   mongoRef: string;
   username: string;
-  birthYear: number;
+  age: number | null;
   bio: string;
-  country: string;
+  countryOrigin: string;
   profession: string;
   friendlyId: string;
   deletedAt: Date | null;
   profilePicture: string;
+  location: {
+    country: string;
+    city: string;
+  };
   active: boolean;
+  coverImage: string;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -26,7 +31,7 @@ const UserSchema: Schema<IUser> = new Schema(
       type: String,
       required: false,
     },
-    country: {
+    countryOrigin: {
       type: String,
       required: false,
     },
@@ -34,6 +39,10 @@ const UserSchema: Schema<IUser> = new Schema(
       type: String,
       unique: true,
       required: true,
+    },
+    coverImage: {
+      type: String,
+      required: false,
     },
     username: {
       type: String,
@@ -44,15 +53,21 @@ const UserSchema: Schema<IUser> = new Schema(
       type: String,
       required: false,
     },
-
+    location: {
+      country: {
+        type: String,
+        required: false,
+      },
+      city: {
+        type: String,
+        required: false,
+      },
+    },
     profession: {
       type: String,
       required: false,
     },
-    birthYear: {
-      type: Number,
-      required: false,
-    },
+    age: { type: Number, required: false },
     active: {
       type: Boolean,
       default: true,
