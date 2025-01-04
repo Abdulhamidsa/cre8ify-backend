@@ -4,7 +4,7 @@ import { User } from '../../../models/user.model.js';
 
 interface UserMinimalInfo {
   name: string;
-  profilePicture: string;
+  profilePicture: null;
 }
 
 export const getUserMinimalInfoService = async (mongoRef: string): Promise<UserMinimalInfo> => {
