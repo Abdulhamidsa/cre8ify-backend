@@ -1,69 +1,55 @@
 import { AppError } from '../../../common/errors/app.error.js';
-import cloudinary from '../../../common/utils/cloudinary.config.js';
 import Logger from '../../../common/utils/logger.js';
-import { ProjectInput } from '../../../common/validation/project.validation.js';
+import { saveImageToCloudinary } from '../../../common/utils/saveImageToCloudinary.js';
+import { AddProjectInput } from '../../../common/validation/project.validation.js';
 import { Project } from '../../../models/projects.model.js';
 import { Tag } from '../../../models/tag.model.js';
 import { User } from '../../../models/user.model.js';
 
-export const addProjectService = async (mongoRef: string, projectData: ProjectInput): Promise<ProjectInput> => {
+export const addProjectService = async (mongoRef: string, projectData: AddProjectInput): Promise<AddProjectInput> => {
   try {
     const user = await User.findOne({ mongoRef }).lean();
-    if (!user) {
-      throw new AppError('User not found', 404);
-    }
+    if (!user) throw new AppError('User not found', 404);
 
-    const uploadedImages = await Promise.all(
-      projectData.projectImage.map(async (image) => {
-        const uploadResult = await cloudinary.uploader.upload(image.url, {
-          folder: 'projects/images',
-          format: 'webp', // Ensure WebP format
-          transformation: [
-            { quality: 90, width: 800, crop: 'limit' }, // Increase quality to 90%
-          ],
-        });
+    const uploadedMedia = await Promise.all(
+      projectData.media.map(async (image) => ({
+        url: await saveImageToCloudinary(image.url, 'projects/images', [{ quality: 90, width: 800, crop: 'limit' }]),
+      })),
+    );
 
-        return { url: uploadResult.secure_url };
+    const thumbnailUrl = projectData.thumbnail
+      ? await saveImageToCloudinary(projectData.thumbnail, 'projects/thumbnails', [
+          { quality: 'auto', width: 800, crop: 'limit' },
+        ])
+      : '';
+
+    const tagIds = await Promise.all(
+      (projectData.tags || []).map(async (tagName) => {
+        const tag = await Tag.findOneAndUpdate({ name: tagName }, {}, { upsert: true, new: true });
+        return tag._id.toString();
       }),
     );
 
-    let thumbnailUrl = projectData.projectThumbnail;
-    if (projectData.projectThumbnail) {
-      const thumbnailUploadResult = await cloudinary.uploader.upload(projectData.projectThumbnail, {
-        folder: 'projects/thumbnails',
-        format: 'webp', // Force WebP storage
-        transformation: [{ quality: 'auto', width: 800, crop: 'limit' }],
-      });
-      thumbnailUrl = thumbnailUploadResult.secure_url;
-    }
-
-    const tagIds = [];
-    if (projectData.tags) {
-      for (const tagName of projectData.tags) {
-        let tag = await Tag.findOne({ name: tagName });
-        if (!tag) {
-          tag = await Tag.create({ name: tagName });
-        }
-        tagIds.push(tag._id);
-      }
-    }
-
     const newProject = await Project.create({
       ...projectData,
-      projectImage: uploadedImages,
-      projectThumbnail: thumbnailUrl,
+      media: uploadedMedia,
+      thumbnail: thumbnailUrl,
       tags: tagIds,
       userId: user._id,
     });
 
-    const transformedProject: ProjectInput = {
+    const transformedProject = {
       ...newProject.toObject(),
-      tags: newProject.tags.map((tag) => tag.toString()),
+      tags: newProject.tags.map((tag) => tag.toString()), // Cot tags to stringsnver
     };
 
-    return transformedProject;
+    delete transformedProject.id;
+
+    return transformedProject as AddProjectInput;
   } catch (error) {
-    Logger.error(`Error adding project for user ${mongoRef}:`, error);
+    Logger.error(
+      `Error adding project for user ${mongoRef}: ${error instanceof AppError ? error.message : 'Unexpected error'}`,
+    );
     throw error;
   }
 };
