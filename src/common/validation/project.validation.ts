@@ -1,21 +1,63 @@
 import { z } from 'zod';
 
 // Define the Zod schema for project validation
-export const projectValidationSchema = z.object({
-  title: z.string().nonempty('Title is required'),
-  description: z.string().nonempty('Description is required'),
-  projectUrl: z.string().url('Invalid URL for projectUrl'),
-  projectImage: z
+// export const projectValidationSchema = z.object({
+//   title: z.string().nonempty('Title is required'),
+//   description: z.string().nonempty('Description is required'),
+//   url: z.string().url('Invalid URL for projectUrl'),
+//   media: z
+//     .array(
+//       z.object({
+//         url: z.string().url('Invalid URL for image'),
+//       }),
+//     )
+//     .min(1, 'At least one project image is required'),
+//   thumbnail: z.string().url('Invalid URL for thumbnail').optional(),
+//   tags: z.array(z.string()).optional(),
+// });
+// export type ProjectInput = z.infer<typeof projectValidationSchema>;
+
+export const fetchedProjectSchema = z.object({
+  id: z.string().optional(),
+  title: z.string().min(1, 'Title is required.'),
+  description: z.string().min(1, 'Description is required.'),
+  url: z.string().url('Invalid URL format.'),
+  media: z
     .array(
       z.object({
-        url: z.string().url('Invalid URL for image'),
+        url: z.string().url('Invalid URL format.'),
       }),
     )
-    .min(1, 'At least one project image is required'),
-  projectThumbnail: z.string().url('Invalid URL for thumbnail').optional(),
-  tags: z.array(z.string()).optional(),
+    .min(1, 'At least one image is required.'),
+  thumbnail: z.string().url('Invalid thumbnail URL.'),
+  tags: z
+    .array(
+      z.object({
+        id: z.string(),
+        name: z.string(),
+      }),
+    )
+    .optional(),
 });
-export type ProjectInput = z.infer<typeof projectValidationSchema>;
+
+export type FetchedProjectType = z.infer<typeof fetchedProjectSchema>;
+
+export const addProjectSchema = z.object({
+  title: z.string().nonempty('Title is required.'),
+  description: z.string().nonempty('Description is required.'),
+  url: z.string().url('Invalid URL for projectUrl.'),
+  media: z
+    .array(
+      z.object({
+        url: z.string().url('Invalid URL for image.'),
+      }),
+    )
+    .min(1, 'At least one project image is required.'),
+  thumbnail: z.string().url('Invalid URL for thumbnail').optional(),
+  tags: z.array(z.string()).optional(), // Tags as string IDs
+});
+
+export type AddProjectInput = z.infer<typeof addProjectSchema>;
 
 export const mongoIdValidationSchema = z.string().regex(/^[a-fA-F0-9]{24}$/, 'Invalid MongoDB ObjectId');
 export const getProjectValidationSchema = z.object({
@@ -31,15 +73,15 @@ export const getProjectValidationSchema = z.object({
 export const editProjectValidationSchema = z.object({
   title: z.string().optional(),
   description: z.string().optional(),
-  projectUrl: z.string().url('Invalid URL for projectUrl').optional(),
-  projectImage: z
+  url: z.string().url('Invalid URL for projectUrl').optional(),
+  media: z
     .array(
       z.object({
         url: z.string().url('Invalid URL for image'),
       }),
     )
     .optional(),
-  projectThumbnail: z.string().url('Invalid URL for thumbnail').optional(),
+  thumbnail: z.string().url('Invalid URL for thumbnail').optional(),
   tags: z.array(z.string()).optional(),
 });
 

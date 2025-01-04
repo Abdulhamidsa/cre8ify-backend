@@ -6,10 +6,11 @@ export const signUpSchema = z.object({
   email: z.string().email('Invalid email format'),
   username: z.string().min(3, 'Username must be at least 3 characters long').optional(),
   password: z.string().min(8, 'Password must be at least 8 characters'),
-  birthYear: z.number().positive('Birth year must be a positive number').optional(),
+  age: z.number().int().positive().optional(), // Ensure `age` is optional or required based on your needs
   bio: z.string().max(500, 'Bio must not exceed 500 characters').optional(),
   profilePicture: z.string().url('Invalid URL format').optional(),
-  country: z.string().optional(),
+  coverImage: z.string().url('Invalid URL format').optional(),
+  countryOrigin: z.string().optional(),
   profession: z.string().optional(),
 });
 export type SignUpInput = z.infer<typeof signUpSchema>;
@@ -29,25 +30,19 @@ export type RefreshTokenInput = z.infer<typeof refreshTokenSchema>;
 
 // edit user schema
 export const editUserSchema = z.object({
-  username: z.string().min(1, 'Name cannot be empty').optional(),
-  birthYear: z.number().positive('Birth year must be a positive number').optional(),
-  bio: z.string().max(500, 'Bio must not exceed 500 characters').optional(),
-  profilePicture: z.string().url('Invalid URL format').optional(),
-  country: z.string().optional(),
-  profession: z.string().optional(),
+  username: z.string().min(1, 'Name cannot be empty').nullable().optional(),
+  age: z.number().nullable().optional(),
+  bio: z.string().max(500, 'Bio must not exceed 500 characters').nullable().optional(),
+  profilePicture: z.string().optional(),
+  coverImage: z.string().optional(),
+  countryOrigin: z.string().nullable().optional(),
+  friendlyId: z.string().nullable().optional(),
+  profession: z.string().nullable().optional(),
 });
+
 export type EditUserInput = z.infer<typeof editUserSchema>;
 
 // user schema
-export const userSchema = z.object({
-  id: z.string(),
-  name: z.string(),
-  birthYear: z.number(),
-  bio: z.string().optional(),
-  profilePicture: z.string().optional(),
-  country: z.string().optional(),
-});
-export type User = z.infer<typeof userSchema>;
 
 export const userResponeSchema = z.object({
   _id: z.string(),
