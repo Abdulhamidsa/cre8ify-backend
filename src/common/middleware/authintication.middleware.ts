@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
 
 import { User } from '../../models/user.model.js';
+import { SECRETS } from '../config/config.js';
 import { AppError } from '../errors/app.error.js';
 import { getCookieOptions } from '../utils/cookie.utils.js';
 import { getErrorMessage } from '../utils/error.utils.js';
@@ -19,7 +20,7 @@ export const authenticateAndRefresh = async (req: Request, res: Response, next: 
     // Check if accessToken is present and valid
     if (accessToken) {
       try {
-        const decoded = jwt.verify(accessToken, process.env.JWT_SECRET as string) as {
+        const decoded = jwt.verify(accessToken, SECRETS.jwtSecret as string) as {
           mongo_ref: string;
           friendlyId: string;
         };
