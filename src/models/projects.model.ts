@@ -5,9 +5,9 @@ export interface ProjectDocument extends Document {
   userId: mongoose.Types.ObjectId;
   title: string;
   description: string;
-  projectUrl: string;
-  projectImage: { url: string }[];
-  projectThumbnail?: string;
+  url: string;
+  media: { url: string }[];
+  thumbnail?: string;
   tags: mongoose.Types.ObjectId[];
   createdAt: Date;
   updatedAt: Date;
@@ -31,11 +31,11 @@ const projectSchema: Schema<ProjectDocument> = new Schema(
       required: true,
       trim: true,
     },
-    projectUrl: {
+    url: {
       type: String,
       required: true,
     },
-    projectImage: [
+    media: [
       {
         url: {
           type: String,
@@ -43,7 +43,7 @@ const projectSchema: Schema<ProjectDocument> = new Schema(
         },
       },
     ],
-    projectThumbnail: {
+    thumbnail: {
       type: String,
     },
     tags: [
