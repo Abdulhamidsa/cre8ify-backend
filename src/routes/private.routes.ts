@@ -4,9 +4,9 @@ import { attachUserContext } from '../common/middleware/attach.user.context.js';
 import { authenticateAndRefresh } from '../common/middleware/authintication.middleware.js';
 import { ValidZod } from '../common/middleware/zod.middleware.js';
 import {
+  addProjectSchema,
   editProjectValidationSchema,
   projectIdValidationSchema,
-  projectValidationSchema,
 } from '../common/validation/project.validation.js';
 import { editUserSchema } from '../common/validation/user.validation.js';
 import { signoutHandler } from '../features/auth/auth.handlers.js';
@@ -37,7 +37,7 @@ router.post('/signout', signoutHandler);
 // ==============================
 
 // Add project
-router.post('/project', ValidZod(projectValidationSchema, 'body'), handleAddProject);
+router.post('/project', ValidZod(addProjectSchema, 'body'), handleAddProject);
 
 // Get project
 router.get('/projects', handleGetUserProjects);
