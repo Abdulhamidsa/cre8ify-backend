@@ -1,6 +1,6 @@
 import { AppError } from '../../../common/errors/app.error.js';
 import Logger from '../../../common/utils/logger.js';
-import { EditProjectInput } from '../../../common/validation/project.validation.js';
+import { EditProjectInput } from '../../../common/validation/project.zod.js';
 import { Project } from '../../../models/projects.model.js';
 import { User } from '../../../models/user.model.js';
 

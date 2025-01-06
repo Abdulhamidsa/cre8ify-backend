@@ -8,7 +8,7 @@ import Logger from '../../common/utils/logger.js';
 import { ApiResponse, createResponse } from '../../common/utils/response.handler.js';
 import { SQL_QUERIES } from '../../common/utils/sql.constants.js';
 import { withTransaction } from '../../common/utils/transaction.helper.js';
-import { SignInInput } from '../../common/validation/user.validation.js';
+import { SignInInput } from '../../common/validation/user.zod.js';
 import { User } from '../../models/user.model.js';
 
 export const signInUser = async (data: SignInInput): Promise<ApiResponse<SignInResponse>> => {
@@ -31,8 +31,7 @@ export const signInUser = async (data: SignInInput): Promise<ApiResponse<SignInR
       const result = await sqlClient.query(SQL_QUERIES.getUserLogin, [email]);
       const user = result.rows[0];
       if (!user) {
-        // Use a generic error message to avoid exposing details
-        throw new AppError('Invalid email or password', 400);
+        throw new AppError('Invalid email or password', 400); // Avoid exposing details
       }
 
       const { password_hash, mongo_ref } = user;
@@ -45,14 +44,18 @@ export const signInUser = async (data: SignInInput): Promise<ApiResponse<SignInR
       }
     });
 
-    // Validate user existence in MongoDB
-    const mongoUser = await User.findOne({ mongoRef });
+    // Check MongoDB user existence and cache email if missing
+    const mongoUser = await User.findOneAndUpdate(
+      { mongoRef },
+      { $setOnInsert: { email } }, // Cache email only if the document is new
+      { new: true, upsert: true, projection: 'friendlyId email' }, // Return friendlyId and email
+    );
+
     if (!mongoUser) {
-      Logger.error(`MongoDB user not found for mongoRef: ${mongoRef}`);
+      Logger.error(`MongoDB user not found or failed for mongoRef: ${mongoRef}`);
       throw new AppError('Authentication failed', 500); // Secure error message
     }
 
-    // Extract friendlyId from MongoDB user
     friendlyId = mongoUser.friendlyId;
 
     // Generate access and refresh tokens

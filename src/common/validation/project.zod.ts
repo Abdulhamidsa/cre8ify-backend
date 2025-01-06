@@ -1,22 +1,5 @@
 import { z } from 'zod';
 
-// Define the Zod schema for project validation
-// export const projectValidationSchema = z.object({
-//   title: z.string().nonempty('Title is required'),
-//   description: z.string().nonempty('Description is required'),
-//   url: z.string().url('Invalid URL for projectUrl'),
-//   media: z
-//     .array(
-//       z.object({
-//         url: z.string().url('Invalid URL for image'),
-//       }),
-//     )
-//     .min(1, 'At least one project image is required'),
-//   thumbnail: z.string().url('Invalid URL for thumbnail').optional(),
-//   tags: z.array(z.string()).optional(),
-// });
-// export type ProjectInput = z.infer<typeof projectValidationSchema>;
-
 export const fetchedProjectSchema = z.object({
   id: z.string().optional(),
   title: z.string().min(1, 'Title is required.'),
@@ -42,6 +25,21 @@ export const fetchedProjectSchema = z.object({
 
 export type FetchedProjectType = z.infer<typeof fetchedProjectSchema>;
 
+// Schema for validating optional query parameters (if any)
+export const fetchedProjectQuerySchema = z.object({
+  limit: z
+    .string()
+    .optional()
+    .refine((val) => !val || !isNaN(Number(val)), { message: 'Limit must be a number.' })
+    .transform((val) => (val ? Number(val) : undefined)),
+  page: z
+    .string()
+    .optional()
+    .refine((val) => !val || !isNaN(Number(val)), { message: 'Page must be a number.' })
+    .transform((val) => (val ? Number(val) : undefined)),
+});
+
+export type FetchedProjectQueryType = z.infer<typeof fetchedProjectQuerySchema>;
 export const addProjectSchema = z.object({
   title: z.string().nonempty('Title is required.'),
   description: z.string().nonempty('Description is required.'),
@@ -64,11 +62,6 @@ export const getProjectValidationSchema = z.object({
   id: mongoIdValidationSchema,
 });
 
-// Use this schema to process multiple projects
-// const projectArraySchema = z.array(projectSchema);
-
-// Type inference
-
 // Define the schema for editing a project
 export const editProjectValidationSchema = z.object({
   title: z.string().optional(),
@@ -90,3 +83,18 @@ export type EditProjectInput = z.infer<typeof editProjectValidationSchema>;
 export const projectIdValidationSchema = z.object({
   id: z.string().regex(/^[a-fA-F0-9]{24}$/, 'Invalid MongoDB ObjectId'),
 });
+
+export const fetchAllPostsSchema = z.object({
+  limit: z
+    .string()
+    .optional()
+    .refine((val) => !val || !isNaN(Number(val)), { message: 'Limit must be a number.' })
+    .transform((val) => (val ? Number(val) : undefined)),
+  page: z
+    .string()
+    .optional()
+    .refine((val) => !val || !isNaN(Number(val)), { message: 'Page must be a number.' })
+    .transform((val) => (val ? Number(val) : undefined)),
+});
+
+export type FetchAllPostsQuery = z.infer<typeof fetchAllPostsSchema>;

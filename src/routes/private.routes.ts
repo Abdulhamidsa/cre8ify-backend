@@ -3,13 +3,16 @@ import { Router } from 'express';
 import { attachUserContext } from '../common/middleware/attach.user.context.js';
 import { authenticateAndRefresh } from '../common/middleware/authintication.middleware.js';
 import { ValidZod } from '../common/middleware/zod.middleware.js';
+import { addPostSchema } from '../common/validation/post.zod.js';
 import {
   addProjectSchema,
   editProjectValidationSchema,
+  fetchAllPostsSchema,
   projectIdValidationSchema,
-} from '../common/validation/project.validation.js';
-import { editUserSchema } from '../common/validation/user.validation.js';
+} from '../common/validation/project.zod.js';
+import { editUserSchema } from '../common/validation/user.zod.js';
 import { signoutHandler } from '../features/auth/auth.handlers.js';
+import { handleAddPost, handleFetchAllPosts } from '../features/post/post.handlers.js';
 import {
   handleAddProject,
   handleDeleteProject,
@@ -51,5 +54,9 @@ router.put(
 );
 // delete project
 router.delete('/project/:id', ValidZod(projectIdValidationSchema, 'params'), handleDeleteProject);
+// add post
+router.post('/post', ValidZod(addPostSchema, 'body'), handleAddPost);
+// all posts
+router.get('/post', ValidZod(fetchAllPostsSchema, 'query'), handleFetchAllPosts);
 
 export default router;

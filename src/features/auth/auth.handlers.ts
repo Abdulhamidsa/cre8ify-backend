@@ -6,7 +6,7 @@ import { getCookieOptions } from '../../common/utils/cookie.utils.js';
 
 import { verifyToken } from '../../common/utils/jwt.js';
 import { createResponse } from '../../common/utils/response.handler.js';
-import { SignInInput, SignUpInput } from '../../common/validation/user.validation.js';
+import { SignInInput, SignUpInput } from '../../common/validation/user.zod.js';
 import { signInUser } from './auth.signin.service.js';
 import { signUpUserService } from './auth.signup.service.js';
 import { refreshTokenService } from './refresh.token.service.js';

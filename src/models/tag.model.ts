@@ -1,9 +1,10 @@
-import mongoose, { Schema } from 'mongoose';
+import mongoose, { Document, Schema } from 'mongoose';
 
-export type Tag = {
+export interface ITag extends Document {
   name: string;
-};
-const TagSchema: Schema<Tag> = new Schema(
+}
+
+const TagSchema: Schema<ITag> = new Schema(
   {
     name: {
       type: String,
@@ -11,29 +12,8 @@ const TagSchema: Schema<Tag> = new Schema(
       unique: true,
       trim: true,
     },
-    // Add other fields if necessary
   },
   { timestamps: true },
 );
 
-export const Tag = mongoose.model<Tag>('Tag', TagSchema);
-
-// models/Tag.js
-// import mongoose, { Schema, model } from 'mongoose';
-
-// const Tag = new Schema(
-//   {
-//     name: {
-//       type: String,
-//       required: true,
-//       unique: true,
-//       trim: true,
-//     },
-//     // Add other fields if necessary
-//   },
-//   { timestamps: true }
-// );
-
-// export const Tag = mongoose.model<Tag>('Tag', TagSchema);
-
-// export default Tag;
+export const Tag = mongoose.model<ITag>('Tag', TagSchema);

@@ -5,7 +5,7 @@ import { generateMongoRef, hashPassword } from '../../common/utils/helpers.js';
 import Logger from '../../common/utils/logger.js';
 import { saveDocument } from '../../common/utils/mongo.service.js';
 import { SQL_QUERIES } from '../../common/utils/sql.constants.js';
-import { SignUpInput } from '../../common/validation/user.validation.js';
+import { SignUpInput } from '../../common/validation/user.zod.js';
 import { User } from '../../models/user.model.js';
 
 export const signUpUserService = async (data: SignUpInput): Promise<void> => {

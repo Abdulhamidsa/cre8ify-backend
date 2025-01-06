@@ -1,7 +1,7 @@
 import { AppError } from '../../../common/errors/app.error.js';
 import Logger from '../../../common/utils/logger.js';
 import { saveImageToCloudinary } from '../../../common/utils/saveImageToCloudinary.js';
-import { AddProjectInput } from '../../../common/validation/project.validation.js';
+import { AddProjectInput } from '../../../common/validation/project.zod.js';
 import { Project } from '../../../models/projects.model.js';
 import { Tag } from '../../../models/tag.model.js';
 import { User } from '../../../models/user.model.js';
@@ -25,8 +25,8 @@ export const addProjectService = async (mongoRef: string, projectData: AddProjec
 
     const tagIds = await Promise.all(
       (projectData.tags || []).map(async (tagName) => {
-        const tag = await Tag.findOneAndUpdate({ name: tagName }, {}, { upsert: true, new: true });
-        return tag._id.toString();
+        const tag = await Tag.findOneAndUpdate({ name: tagName }, {}, { upsert: true, new: true }).lean();
+        return tag?._id?.toString();
       }),
     );
 

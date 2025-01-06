@@ -46,13 +46,7 @@ const projectSchema: Schema<ProjectDocument> = new Schema(
     thumbnail: {
       type: String,
     },
-    tags: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: 'Tag',
-        default: [],
-      },
-    ],
+    tags: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Tag' }],
   },
   {
     timestamps: true, // Automatically adds `createdAt` and `updatedAt`

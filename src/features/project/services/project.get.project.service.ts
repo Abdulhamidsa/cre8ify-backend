@@ -1,8 +1,8 @@
 import { AppError } from '../../../common/errors/app.error.js';
 import Logger from '../../../common/utils/logger.js';
-import { fetchedProjectSchema } from '../../../common/validation/project.validation.js';
+import { fetchedProjectSchema } from '../../../common/validation/project.zod.js';
 // Import your Zod schema
-import { FetchedProjectType } from '../../../common/validation/project.validation.js';
+import { FetchedProjectType } from '../../../common/validation/project.zod.js';
 import { Project } from '../../../models/projects.model.js';
 import { Tag } from '../../../models/tag.model.js';
 import { User } from '../../../models/user.model.js';
@@ -26,7 +26,7 @@ export const getUserProjectsService = async (mongoRef: string): Promise<FetchedP
     const transformedProjects = await Promise.all(
       projects.map(async (project) => {
         // Fetch tags from the Tag collection
-        const tags = await Tag.find({ _id: { $in: project.tags } }).select('name');
+        const tags: { _id: string; name: string }[] = await Tag.find({ _id: { $in: project.tags } }).select('name');
 
         // Build the transformed project object
         const transformedProject = {

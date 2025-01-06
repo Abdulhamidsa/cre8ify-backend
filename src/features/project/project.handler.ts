@@ -1,9 +1,11 @@
 import { RequestHandler } from 'express';
 
 import { createResponse } from '../../common/utils/response.handler.js';
+import { FetchedProjectQueryType } from '../../common/validation/project.zod.js';
 import { addProjectService } from './services/project.add.service.js';
 import { deleteProjectService } from './services/project.delete.service.js';
 import { editProjectService } from './services/project.edit.service.js';
+import { getAllProjectsService } from './services/project.get.all.service.js';
 import { getUserProjectsService } from './services/project.get.project.service.js';
 
 export const handleAddProject: RequestHandler = async (req, res, next) => {
@@ -52,5 +54,16 @@ export const handleDeleteProject: RequestHandler = async (req, res, next) => {
     res.status(200).json(createResponse(true, 'Project deleted successfully'));
   } catch (error) {
     next(error);
+  }
+};
+
+// fetch all projects
+export const handleGetAllProjects: RequestHandler = async (req, res, next) => {
+  try {
+    const { limit, page } = req.query as FetchedProjectQueryType; // Validated query parameters
+    const projects = await getAllProjectsService({ limit, page });
+    res.status(200).json(createResponse(true, projects));
+  } catch (error) {
+    next(error); // Pass error to middleware
   }
 };

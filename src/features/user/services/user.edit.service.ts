@@ -2,16 +2,23 @@ import { AppError } from '../../../common/errors/app.error.js';
 import { generateFriendlyId } from '../../../common/utils/generate.id.js';
 import Logger from '../../../common/utils/logger.js';
 import { saveImageToCloudinary } from '../../../common/utils/saveImageToCloudinary.js';
-import { EditUserInput } from '../../../common/validation/user.validation.js';
+import { EditUserInput } from '../../../common/validation/user.zod.js';
 import { User } from '../../../models/user.model.js';
 
 export const editUserProfileService = async (mongoRef: string, profileData: EditUserInput): Promise<EditUserInput> => {
   try {
-    let profilePictureUrl = '';
-    let coverImageUrl = '';
+    // Fetch the current user data
+    const currentUser = await User.findOne({ mongoRef: mongoRef }).lean();
 
-    // Handle profile picture upload if provided
-    if (profileData.profilePicture) {
+    if (!currentUser) {
+      throw new AppError('User not found', 404);
+    }
+
+    let profilePictureUrl = currentUser.profilePicture || '';
+    let coverImageUrl = currentUser.coverImage || '';
+
+    // Handle profile picture upload only if it has changed
+    if (profileData.profilePicture && profileData.profilePicture !== currentUser.profilePicture) {
       profilePictureUrl = await saveImageToCloudinary(
         profileData.profilePicture,
         'users/profile_pictures',
@@ -21,8 +28,8 @@ export const editUserProfileService = async (mongoRef: string, profileData: Edit
       profileData = { ...profileData, profilePicture: profilePictureUrl };
     }
 
-    // Handle cover image upload if provided
-    if (profileData.coverImage) {
+    // Handle cover image upload only if it has changed
+    if (profileData.coverImage && profileData.coverImage !== currentUser.coverImage) {
       coverImageUrl = await saveImageToCloudinary(
         profileData.coverImage,
         'users/cover_images',
@@ -33,7 +40,7 @@ export const editUserProfileService = async (mongoRef: string, profileData: Edit
     }
 
     // Generate a new friendlyId if the username is updated
-    if (profileData.username) {
+    if (profileData.username && profileData.username !== currentUser.username) {
       profileData = { ...profileData, friendlyId: generateFriendlyId(profileData.username) };
       Logger.info(`Generated new friendlyId: ${profileData.friendlyId}`);
     }

@@ -9,5 +9,5 @@ export const getErrorMessage = (error: unknown): string => {
     return error.message;
   }
 
-  return 'An unknown error occurred';
+  return 'An unknown error';
 };
