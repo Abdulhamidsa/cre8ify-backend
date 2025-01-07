@@ -1,5 +1,7 @@
 import { Router } from 'express';
 
+import { attachUserContext } from '../common/middleware/attach.user.context.js';
+import { authenticateAndRefresh } from '../common/middleware/authintication.middleware.js';
 import authPrivateRoutes from '../features/auth/routes/auth.private.routes.js';
 import authPublicRoutes from '../features/auth/routes/auth.public.routes.js';
 import postPrivateRoutes from '../features/post/routes/post.private.routes.js';
@@ -11,7 +13,9 @@ const router = Router();
 // Public routes
 router.use('/auth', authPublicRoutes);
 
-// Private routes (apply common middlewares if needed)
+// Private routes (common middlewares)
+router.use(authenticateAndRefresh, attachUserContext);
+
 router.use(authPrivateRoutes);
 router.use(projectPrivateRoutes);
 router.use(userPrivateRoutes);

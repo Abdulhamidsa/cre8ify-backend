@@ -1,15 +1,11 @@
 import { Router } from 'express';
 
-import { attachUserContext } from '../../../common/middleware/attach.user.context.js';
-import { authenticateAndRefresh } from '../../../common/middleware/authintication.middleware.js';
 import { ValidZod } from '../../../common/middleware/zod.middleware.js';
 import { createResponse } from '../../../common/utils/response.handler.js';
 import { updateCredentialsSchema } from '../../../common/validation/user.zod.js';
 import { fetchCredentialsHandler, signoutHandler, updateCredentialsHandler } from '../auth.handlers.js';
 
 const router = Router();
-
-router.use(authenticateAndRefresh, attachUserContext);
 
 router.get('/refresh', (_req, res) => {
   res.status(200).json(

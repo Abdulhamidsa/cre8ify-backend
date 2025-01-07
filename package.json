@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "clean": "rimraf dist",
-    "build": "tsc",
+    "build": "tsc && node add-js-extensions.js",
     "test": "vitest",
     "start": "pnpm run build && node dist/index.js",
     "dev": "tsx watch --clear-screen=false src/index.ts"
