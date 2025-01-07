@@ -16,7 +16,7 @@ export const addTagsService = async (tagNames: string[]): Promise<string[]> => {
     const newTagNames = tagNames.filter((tagName) => !existingTagNames.includes(tagName));
     const newTags = await Tag.insertMany(newTagNames.map((name) => ({ name })));
 
-    const newTagIds = newTags.map((tag) => tag._id.toString());
+    const newTagIds = newTags.map((tag) => tag.id.toString());
 
     return [...existingTagIds, ...newTagIds];
   } catch (error) {
