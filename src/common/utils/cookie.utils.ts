@@ -6,7 +6,7 @@ export const getCookieOptions = (tokenType: 'access' | 'refresh'): CookieOptions
   const commonOptions: CookieOptions = {
     httpOnly: true,
     secure: SECRETS.nodeEnv === 'production',
-    sameSite: 'strict',
+    sameSite: SECRETS.nodeEnv === 'production' ? 'none' : 'lax',
   };
 
   if (tokenType === 'access') {
