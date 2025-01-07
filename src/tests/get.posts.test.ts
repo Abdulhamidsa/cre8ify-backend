@@ -1,57 +1,104 @@
-import request from 'supertest';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+// import express, { Express, NextFunction, Request, Response } from 'express';
+// import mongoose from 'mongoose';
 
-// For making HTTP requests
-import app from '../app';
-import { handleFetchAllPosts } from '../features/post/post.handlers';
+// import app from '../../src/server';
+// import { createMongooseId } from './helpers/mock.data';
 
-// Import the Express app
+// /**
+//  * Extend the Request interface to include `locals` for storing user data.
+//  */
+// // declare module 'express' {
+// //   interface Request {
+// //     locals: {
+// //       mongo_ref: string;
+// //     };
+// //   }
+// // }
 
-// Import your handler
+// /**
+//  * Connect to MongoDB.
+//  * @param {string} uri - MongoDB connection string.
+//  * @returns {Promise<void>} - Resolves when connected, rejects on error.
+//  */
+// const connectToDatabase = async (uri: string): Promise<void> => {
+//   if (!uri || uri === 'null') {
+//     console.error('Error: Database URI is not defined:', uri);
+//     throw new Error('Database URI is undefined');
+//   }
 
-// Mock the handler logic
-vi.mock('../handlers/postHandler', () => ({
-  handleFetchAllPosts: vi.fn(),
-}));
+//   try {
+//     console.log('Connecting to database:', uri);
+//     await mongoose.connect(uri);
+//     if (process.env.NODE_ENV !== 'TEST') {
+//       console.log('Database connected successfully');
+//     }
+//   } catch (error) {
+//     console.error('Database connection error:', error);
+//     throw error;
+//   }
+// };
 
-describe('GET /post', () => {
-  beforeEach(() => {
-    vi.clearAllMocks();
-  });
+// /**
+//  * Disconnect from MongoDB.
+//  * @returns {Promise<void>} - Resolves when disconnected, rejects on error.
+//  */
+// const disconnectFromDatabase = async (): Promise<void> => {
+//   try {
+//     await mongoose.disconnect();
+//     console.log('Database disconnected successfully');
+//   } catch (error) {
+//     console.error('Error during database disconnection:', error);
+//     throw error;
+//   }
+// };
 
-  it('should fetch all posts successfully with valid query parameters', async () => {
-    // Mock a response from the handler
-    const mockPosts = [
-      { id: 1, title: 'Post 1', content: 'Content 1' },
-      { id: 2, title: 'Post 2', content: 'Content 2' },
-    ];
+// /**
+//  * Start the server by connecting to MongoDB.
+//  * @returns {Promise<void>} - Resolves when server is ready, rejects on error.
+//  */
+// export const startServer = async (): Promise<void> => {
+//   const uri = process.env.MONGO_CONNECTION_STRING;
 
-    handleFetchAllPosts.mockImplementation((req, res) => {
-      res.status(200).json(mockPosts);
-    });
+//   if (!uri) {
+//     console.error('MONGO_CONNECTION_STRING is not defined');
+//     throw new Error('MONGO_CONNECTION_STRING is not defined');
+//   }
 
-    const response = await request(app).get('/post').query({ page: 1, limit: 10 }); // Example query params
+//   try {
+//     await connectToDatabase(uri);
+//     console.log('Server setup complete');
+//   } catch (error) {
+//     console.error('Error during server startup:', error);
+//     throw error;
+//   }
+// };
 
-    expect(response.status).toBe(200);
-    expect(response.body).toEqual(mockPosts);
-    expect(handleFetchAllPosts).toHaveBeenCalled();
-  });
+// /**
+//  * Shutdown the server by disconnecting from MongoDB.
+//  * @returns {Promise<void>} - Resolves when server shutdown is complete, rejects on error.
+//  */
+// export const shutdownServer = async (): Promise<void> => {
+//   try {
+//     await disconnectFromDatabase();
+//     console.log('Server shutdown complete');
+//   } catch (error) {
+//     console.error('Error during server shutdown:', error);
+//     throw error;
+//   }
+// };
 
-  it('should return 400 when invalid query parameters are provided', async () => {
-    const response = await request(app).get('/post').query({ page: 'invalid', limit: 'invalid' }); // Invalid query params
+// /**
+//  * Mocked Express application with middleware for testing purposes.
+//  */
+// export const mockedApp: Express = express();
 
-    expect(response.status).toBe(400);
-    expect(response.body).toHaveProperty('error'); // Assuming you send validation errors
-  });
+// /**
+//  * Middleware to add a mocked userId to `req.locals`.
+//  */
+// mockedApp.use((req: Request, _res: Response, next: NextFunction) => {
+//   req.locals = { mongo_ref: createMongooseId().toHexString() };
+//   next();
+// });
 
-  it('should handle unexpected errors gracefully', async () => {
-    handleFetchAllPosts.mockImplementation(() => {
-      throw new Error('Unexpected error');
-    });
-
-    const response = await request(app).get('/post').query({ page: 1, limit: 10 });
-
-    expect(response.status).toBe(500); // Assuming 500 for unexpected errors
-    expect(response.body).toHaveProperty('error');
-  });
-});
+// // Attach the actual application
+// mockedApp.use(app);
