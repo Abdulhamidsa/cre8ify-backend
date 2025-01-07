@@ -7,6 +7,8 @@ import { getCookieOptions } from '../../common/utils/cookie.utils.js';
 import { verifyToken } from '../../common/utils/jwt.js';
 import { createResponse } from '../../common/utils/response.handler.js';
 import { SignInInput, SignUpInput } from '../../common/validation/user.zod.js';
+import { updateCredentialsService } from './auth.edit.credentials.service.js';
+import { fetchCredentialsService } from './auth.fetch.credentials.service.js';
 import { signInUser } from './auth.signin.service.js';
 import { signUpUserService } from './auth.signup.service.js';
 import { refreshTokenService } from './refresh.token.service.js';
@@ -96,6 +98,40 @@ export const signoutHandler: RequestHandler = async (req, res, next): Promise<vo
 
     // Respond with success
     res.status(200).json(createResponse(true, { message: 'Signout successful' }));
+  } catch (error) {
+    next(error);
+  }
+};
+
+// fetch credentials handler
+export const fetchCredentialsHandler: RequestHandler = async (_req, res, next): Promise<void> => {
+  try {
+    const mongoRef = res.locals.mongoRef;
+
+    if (!mongoRef) {
+      throw new AppError('MongoRef is required', 400);
+    }
+
+    const credentials = await fetchCredentialsService(mongoRef);
+    res.status(200).json(createResponse(true, credentials));
+  } catch (error) {
+    next(error);
+  }
+};
+
+// edit credentials handler
+
+export const updateCredentialsHandler: RequestHandler = async (req, res, next): Promise<void> => {
+  try {
+    const mongoRef = res.locals.mongoRef;
+    const { email, password } = req.body;
+
+    if (!mongoRef) {
+      res.status(400).json(createResponse(false, { message: 'MongoRef is required' }));
+    }
+
+    await updateCredentialsService(mongoRef, email, password);
+    res.status(200).json(createResponse(true, { message: 'Credentials updated successfully' }));
   } catch (error) {
     next(error);
   }
