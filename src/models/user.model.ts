@@ -16,6 +16,7 @@ interface IUser extends Document {
   };
   active: boolean;
   coverImage: string;
+  completedProfile: boolean;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -39,6 +40,10 @@ const UserSchema: Schema<IUser> = new Schema(
       type: String,
       unique: true,
       required: true,
+    },
+    completedProfile: {
+      type: Boolean,
+      default: false,
     },
     coverImage: {
       type: String,
