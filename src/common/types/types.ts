@@ -57,3 +57,24 @@ export type PostType = {
   createdAt: Date;
   updatedAt: Date;
 };
+
+export type UserType = {
+  mongoRef: string;
+  username: string;
+  age: number | null;
+  bio: string;
+  countryOrigin: string;
+  profession: string;
+  friendlyId: string;
+  deletedAt: Date | null;
+  profilePicture: string;
+  location: {
+    country: string;
+    city: string;
+  };
+  active: boolean;
+  coverImage: string;
+  completedProfile: boolean;
+  createdAt: Date;
+  updatedAt: Date;
+};
