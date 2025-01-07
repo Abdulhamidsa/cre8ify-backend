@@ -1,7 +1,7 @@
 import bcrypt from 'bcryptjs';
 import { v4 as uuidv4 } from 'uuid';
 
-import { UserType } from '../types/types';
+import { UserType } from '../types/types.js';
 
 export const generateFriendlyId = (firstName: string): string => {
   const shortId = uuidv4().split('-')[0]; // Use the first part of the UUID

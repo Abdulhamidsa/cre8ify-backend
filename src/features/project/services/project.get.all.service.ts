@@ -1,5 +1,5 @@
-import { AppError } from '../../../common/errors/app.error';
-import { Project } from '../../../models/projects.model';
+import { AppError } from '../../../common/errors/app.error.js';
+import { Project } from '../../../models/projects.model.js';
 
 export const getAllProjectsService = async ({ limit, page }: { limit?: number; page?: number }) => {
   try {

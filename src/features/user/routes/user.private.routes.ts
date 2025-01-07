@@ -1,13 +1,13 @@
 import { Router } from 'express';
 
-import { ValidZod } from '../../../common/middleware/zod.middleware';
-import { editUserSchema } from '../../../common/validation/user.zod';
+import { ValidZod } from '../../../common/middleware/zod.middleware.js';
+import { editUserSchema } from '../../../common/validation/user.zod.js';
 import {
   handleDeleteUser,
   handleEditUserProfile,
   handleFetchUserMinimalInfo,
   handleFetchUserProfile,
-} from '../user.handler';
+} from '../user.handler.js';
 
 const router = Router();
 

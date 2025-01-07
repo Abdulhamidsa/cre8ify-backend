@@ -1,12 +1,12 @@
 import { Router } from 'express';
 
-import { ValidZod } from '../../../common/middleware/zod.middleware';
+import { ValidZod } from '../../../common/middleware/zod.middleware.js';
 import {
   addProjectSchema,
   editProjectValidationSchema,
   projectIdValidationSchema,
-} from '../../../common/validation/project.zod';
-import { handleAddProject, handleDeleteProject, handleEditProject, handleGetUserProjects } from '../project.handler';
+} from '../../../common/validation/project.zod.js';
+import { handleAddProject, handleDeleteProject, handleEditProject, handleGetUserProjects } from '../project.handler.js';
 
 const router = Router();
 

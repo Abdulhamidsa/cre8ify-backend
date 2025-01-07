@@ -1,8 +1,8 @@
 // import express, { Express, NextFunction, Request, Response } from 'express';
 // import mongoose from 'mongoose';
 
-// import app from '../../src/server';
-// import { createMongooseId } from './helpers/mock.data';
+// import app from '../../src/server.js';
+// import { createMongooseId } from './helpers/mock.data.js';
 
 // /**
 //  * Extend the Request interface to include `locals` for storing user data.

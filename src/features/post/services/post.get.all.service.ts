@@ -1,6 +1,6 @@
-import { AppError } from '../../../common/errors/app.error';
-import { Post } from '../../../common/models/post.model';
-import { PostType } from '../../../common/types/types';
+import { AppError } from '../../../common/errors/app.error.js';
+import { Post } from '../../../common/models/post.model.js';
+import { PostType } from '../../../common/types/types.js';
 
 export const fetchAllPostsService = async ({ limit, page }: { limit?: number; page?: number }): Promise<PostType[]> => {
   try {

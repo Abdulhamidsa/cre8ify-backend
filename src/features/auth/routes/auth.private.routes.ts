@@ -1,11 +1,11 @@
 import { Router } from 'express';
 
-import { attachUserContext } from '../../../common/middleware/attach.user.context';
-import { authenticateAndRefresh } from '../../../common/middleware/authintication.middleware';
-import { ValidZod } from '../../../common/middleware/zod.middleware';
-import { createResponse } from '../../../common/utils/response.handler';
-import { updateCredentialsSchema } from '../../../common/validation/user.zod';
-import { fetchCredentialsHandler, signoutHandler, updateCredentialsHandler } from '../auth.handlers';
+import { attachUserContext } from '../../../common/middleware/attach.user.context.js';
+import { authenticateAndRefresh } from '../../../common/middleware/authintication.middleware.js';
+import { ValidZod } from '../../../common/middleware/zod.middleware.js';
+import { createResponse } from '../../../common/utils/response.handler.js';
+import { updateCredentialsSchema } from '../../../common/validation/user.zod.js';
+import { fetchCredentialsHandler, signoutHandler, updateCredentialsHandler } from '../auth.handlers.js';
 
 const router = Router();
 

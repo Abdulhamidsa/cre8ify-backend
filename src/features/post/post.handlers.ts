@@ -1,9 +1,9 @@
 import { RequestHandler } from 'express';
 
-import { createResponse } from '../../common/utils/response.handler';
-import { FetchAllPostsQuery } from '../../common/validation/project.zod';
-import { addPostService } from './services/post.add.service';
-import { fetchAllPostsService } from './services/post.get.all.service';
+import { createResponse } from '../../common/utils/response.handler.js';
+import { FetchAllPostsQuery } from '../../common/validation/project.zod.js';
+import { addPostService } from './services/post.add.service.js';
+import { fetchAllPostsService } from './services/post.get.all.service.js';
 
 export const handleAddPost: RequestHandler = async (req, res, next) => {
   const mongoRef = res.locals.mongoRef;
