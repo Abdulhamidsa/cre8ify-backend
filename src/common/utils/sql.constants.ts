@@ -1,5 +1,10 @@
 export const SQL_QUERIES = {
   checkEmailexist: 'SELECT id FROM users WHERE email = $1;',
+  fetchUserCredentials: `
+    SELECT email FROM users WHERE mongo_ref = $1;
+  `,
+  updateUserEmail: `UPDATE users SET email = $1 WHERE mongo_ref = $2;`,
+  updateUserPassword: `UPDATE users SET password_hash = $1 WHERE mongo_ref = $2;`,
   insertUser: `
     INSERT INTO users (email, password_hash, mongo_ref, role)
     VALUES ($1, $2, $3, 'user') RETURNING id;

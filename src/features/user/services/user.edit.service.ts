@@ -1,5 +1,6 @@
 import { AppError } from '../../../common/errors/app.error.js';
 import { generateFriendlyId } from '../../../common/utils/generate.id.js';
+import { isProfileComplete } from '../../../common/utils/helper.js';
 import Logger from '../../../common/utils/logger.js';
 import { saveImageToCloudinary } from '../../../common/utils/saveImageToCloudinary.js';
 import { EditUserInput } from '../../../common/validation/user.zod.js';
@@ -8,7 +9,7 @@ import { User } from '../../../models/user.model.js';
 export const editUserProfileService = async (mongoRef: string, profileData: EditUserInput): Promise<EditUserInput> => {
   try {
     // Fetch the current user data
-    const currentUser = await User.findOne({ mongoRef: mongoRef }).lean();
+    const currentUser = await User.findOne({ mongoRef }).lean();
 
     if (!currentUser) {
       throw new AppError('User not found', 404);
@@ -45,10 +46,14 @@ export const editUserProfileService = async (mongoRef: string, profileData: Edit
       Logger.info(`Generated new friendlyId: ${profileData.friendlyId}`);
     }
 
+    // Check if the profile is complete
+    const updatedProfileData = { ...currentUser, ...profileData };
+    const completedProfile = isProfileComplete(updatedProfileData);
+
     // Update the user document in the database
     const updatedUser = await User.findOneAndUpdate(
-      { mongoRef: mongoRef },
-      { $set: profileData },
+      { mongoRef },
+      { $set: { ...profileData, completedProfile } },
       { new: true, lean: true, runValidators: true },
     ).select('-password -active -updatedAt -deletedAt -mongoRef -_id');
 
