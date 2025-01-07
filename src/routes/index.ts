@@ -1,14 +1,20 @@
 import { Router } from 'express';
 
-import privateRoutes from './private.routes.js';
-import publicRoutes from './public.routes.js';
+import authPrivateRoutes from '../features/auth/routes/auth.private.routes';
+import authPublicRoutes from '../features/auth/routes/auth.public.routes';
+import postPrivateRoutes from '../features/post/routes/post.private.routes';
+import projectPrivateRoutes from '../features/project/routes/projects.private.routes';
+import userPrivateRoutes from '../features/user/routes/user.private.routes';
 
 const router = Router();
 
-// Public routes (accessible without authentication)
-router.use('/internal', privateRoutes);
+// Public routes
+router.use('/auth', authPublicRoutes);
 
-// Private routes (require authentication)
-router.use('/public', publicRoutes);
+// Private routes (apply common middlewares if needed)
+router.use(authPrivateRoutes);
+router.use(projectPrivateRoutes);
+router.use(userPrivateRoutes);
+router.use(postPrivateRoutes);
 
 export default router;
