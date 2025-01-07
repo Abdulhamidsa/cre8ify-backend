@@ -7,6 +7,7 @@
   "scripts": {
     "clean": "rimraf dist",
     "build": "tsc",
+    "test": "vitest",
     "start": "pnpm run build && node dist/index.js",
     "dev": "tsx watch --clear-screen=false src/index.ts"
   },
@@ -52,6 +53,7 @@
     "@types/express": "^5.0.0",
     "@types/jsonwebtoken": "^9.0.7",
     "@types/node": "^22.10.2",
+    "@types/supertest": "^6.0.2",
     "@typescript-eslint/eslint-plugin": "^8.18.2",
     "@typescript-eslint/parser": "^8.18.2",
     "esbuild": "^0.24.2",
