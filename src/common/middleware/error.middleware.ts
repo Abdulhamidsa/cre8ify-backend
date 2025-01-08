@@ -1,12 +1,11 @@
-// expressErrorMiddleware.ts
 import { ErrorRequestHandler, NextFunction, Request, Response } from 'express';
 
-import { AppError } from '../errors/app.error.js';
-import { getErrorMessage } from '../utils/error.utils.js';
-import Logger from '../utils/logger.js';
+import { AppError } from '../errors/app.error';
+import { getErrorMessage } from '../utils/error.utils';
+import Logger from '../utils/logger';
 
 const expressErrorMiddleware: ErrorRequestHandler = (
-  err: AppError | Error,
+  err: Error | AppError,
   _req: Request,
   res: Response,
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -16,14 +15,18 @@ const expressErrorMiddleware: ErrorRequestHandler = (
   const statusCode = err instanceof AppError ? err.status : 500;
   const message = getErrorMessage(err);
 
-  Logger.error(message);
+  Logger.error(message); // Log the message
+
+  // If it's a development environment, log the stack trace as well
   if (isDev && err.stack) {
     Logger.debug(`Stack Trace:\n${err.stack}`);
   }
 
+  // Send the error response
   res.status(statusCode).json({
     success: false,
     message,
+    details: err instanceof AppError ? err.details : undefined, // Send details if available
   });
 };
 
