@@ -1,4 +1,6 @@
 // import mongoose from "mongoose";
+import mongoose from 'mongoose';
+
 import Links from '../data/constants/links.js';
 import Professions from '../data/constants/proffesions.js';
 
@@ -59,5 +61,6 @@ export type SignInResponse = {
   accessToken: string;
   refreshToken: string;
   friendlyId: string;
+  userId: string;
   role?: string;
 };

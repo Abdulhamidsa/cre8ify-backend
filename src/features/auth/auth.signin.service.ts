@@ -1,8 +1,10 @@
 import bcrypt from 'bcrypt';
+import mongoose from 'mongoose';
 
 import { ensureTablesExist, getSQLClient } from '../../common/config/sql-client.js';
 import { AppError } from '../../common/errors/app.error.js';
 import { SignInResponse } from '../../common/types/user.types.js';
+import { getErrorMessage } from '../../common/utils/error.utils.js';
 import { generateTokens } from '../../common/utils/jwt.js';
 import Logger from '../../common/utils/logger.js';
 import { ApiResponse, createResponse } from '../../common/utils/response.handler.js';
@@ -18,6 +20,7 @@ export const signInUser = async (data: SignInInput): Promise<ApiResponse<SignInR
   try {
     let mongoRef = '';
     let friendlyId = '';
+    let userId: string = '';
 
     // Ensure the necessary tables exist
     await ensureTablesExist();
@@ -27,45 +30,41 @@ export const signInUser = async (data: SignInInput): Promise<ApiResponse<SignInR
 
     // Use the transaction utility for SQL operations
     await withTransaction(sqlClient, async () => {
-      // Verify the user in PostgreSQL
       const result = await sqlClient.query(SQL_QUERIES.getUserLogin, [email]);
       const user = result.rows[0];
       if (!user) {
-        throw new AppError('Invalid email or password', 400); // Avoid exposing details
+        throw new AppError('Invalid email or password', 400);
       }
 
       const { password_hash, mongo_ref } = user;
       mongoRef = mongo_ref;
 
-      // Validate the password
       const isPasswordValid = await bcrypt.compare(password, password_hash);
       if (!isPasswordValid) {
         throw new AppError('Invalid email or password', 400);
       }
     });
 
-    // Check MongoDB user existence and cache email if missing
-    const mongoUser = await User.findOneAndUpdate(
+    const mongoUser = (await User.findOneAndUpdate(
       { mongoRef },
-      { $setOnInsert: { email } }, // Cache email only if the document is new
-      { new: true, upsert: true, projection: 'friendlyId email' }, // Return friendlyId and email
-    );
+      { $setOnInsert: { email } },
+      { new: true, upsert: true, projection: 'friendlyId email _id' },
+    )) as { _id: mongoose.Types.ObjectId; friendlyId: string; email: string };
 
     if (!mongoUser) {
-      Logger.error(`MongoDB user not found or failed for mongoRef: ${mongoRef}`);
-      throw new AppError('Authentication failed', 500); // Secure error message
+      throw new AppError('MongoDB user not found', 500);
     }
 
     friendlyId = mongoUser.friendlyId;
+    userId = mongoUser._id.toString();
+    console.log('MongoDB _id:', mongoUser._id);
+    console.log('User ID as string:', userId);
 
-    // Generate access and refresh tokens
-    const { accessToken, refreshToken } = await generateTokens(mongoRef, friendlyId);
+    const { accessToken, refreshToken } = await generateTokens(mongoRef, friendlyId, userId);
 
-    Logger.info(`User with mongoRef ${mongoRef} signed in successfully`);
-
-    return createResponse(true, { mongo_ref: mongoRef, friendlyId, accessToken, refreshToken });
+    return createResponse(true, { mongo_ref: mongoRef, friendlyId, userId, accessToken, refreshToken });
   } catch (error) {
-    Logger.error(`Error during user sign-in for email: ${email}, Error: ${(error as Error).message}`);
+    Logger.error(`Error during user sign-in: ${getErrorMessage(error)}`);
     throw error;
   } finally {
     sqlClient.release();
