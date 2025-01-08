@@ -33,14 +33,19 @@ export const signInHandler: RequestHandler = async (req, res, next): Promise<voi
     const result = await signInUser(data);
 
     if (result.data) {
-      const { accessToken, refreshToken, mongo_ref } = result.data;
+      const { accessToken, refreshToken, mongo_ref, userId } = result.data;
 
       const accessTokenOptions = getCookieOptions('access');
       const refreshTokenOptions = getCookieOptions('refresh');
       res.cookie('refreshToken', refreshToken, refreshTokenOptions);
       res.cookie('accessToken', accessToken, accessTokenOptions);
       if (mongo_ref) {
-        req.locals = { user: { mongo_ref } };
+        req.locals = {
+          user: {
+            mongo_ref,
+            userId,
+          },
+        };
       } else {
         throw new AppError('mongo_ref is missing');
       }
