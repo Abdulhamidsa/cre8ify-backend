@@ -1,7 +1,7 @@
 import { RequestHandler } from 'express';
 
 import { createResponse } from '../../common/utils/response.handler.js';
-import { FetchedProjectQueryType } from '../../common/validation/project.zod.js';
+// import { FetchedProjectQueryType } from '../../common/validation/project.zod.js';
 import { addProjectService } from './services/project.add.service.js';
 import { deleteProjectService } from './services/project.delete.service.js';
 import { editProjectService } from './services/project.edit.service.js';
@@ -32,6 +32,8 @@ export const handleGetUserProjects: RequestHandler = async (_req, res, next) => 
   }
 };
 
+// fetch all projects
+
 // edit user project
 export const handleEditProject: RequestHandler = async (req, res, next) => {
   try {
@@ -58,12 +60,24 @@ export const handleDeleteProject: RequestHandler = async (req, res, next) => {
 };
 
 // fetch all projects
+// export const handleGetAllProjects: RequestHandler = async (req, res, next) => {
+//   try {
+//     const { limit, page } = req.query as FetchedProjectQueryType; // Validated query parameters
+//     const projects = await getAllProjectsService({ limit, page });
+//     res.status(200).json(createResponse(true, projects));
+//   } catch (error) {
+//     next(error); // Pass error to middleware
+//   }
+// };
+
 export const handleGetAllProjects: RequestHandler = async (req, res, next) => {
   try {
-    const { limit, page } = req.query as FetchedProjectQueryType; // Validated query parameters
-    const projects = await getAllProjectsService({ limit, page });
+    const page = parseInt(req.query.page as string, 10) || 1;
+    const limit = parseInt(req.query.limit as string, 10) || 12;
+
+    const projects = await getAllProjectsService(page, limit);
     res.status(200).json(createResponse(true, projects));
   } catch (error) {
-    next(error); // Pass error to middleware
+    next(error);
   }
 };

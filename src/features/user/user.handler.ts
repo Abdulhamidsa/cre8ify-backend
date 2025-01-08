@@ -4,14 +4,18 @@ import { createResponse } from '../../common/utils/response.handler.js';
 import { getAllUsersService } from './services/user.all.service.js';
 import { deleteUserService } from './services/user.delete.service.js';
 import { editUserProfileService } from './services/user.edit.service.js';
+import { getPublicUserProfileService } from './services/user.get.by.id.service.js';
 import { getUserMinimalInfoService } from './services/user.minimal.info.service.js';
 import { getUserProfileService } from './services/user.profile.service.js';
 
-export const handleFetchAllUsers: RequestHandler = async (_req, res, next): Promise<void> => {
+export const handleGetAllUsers: RequestHandler = async (req, res, next) => {
   try {
-    const users = await getAllUsersService();
+    const page = parseInt(req.query.page as string, 10) || 1;
+    const limit = parseInt(req.query.limit as string, 10) || 12; // Default to 12 if undefined
+
+    const users = await getAllUsersService(page, limit);
+
     res.status(200).json(createResponse(true, users));
-    return;
   } catch (error) {
     next(error);
   }
@@ -63,6 +67,7 @@ export const handleEditUserProfile: RequestHandler = async (req, res, next): Pro
 export const handleDeleteUser: RequestHandler = async (_req, res, next): Promise<void> => {
   try {
     const mongoRef = res.locals.mongoRef;
+
     if (!mongoRef) {
       res.status(401).json(createResponse(false, 'User is not authenticated'));
       return;
@@ -70,6 +75,16 @@ export const handleDeleteUser: RequestHandler = async (_req, res, next): Promise
 
     await deleteUserService(mongoRef);
     res.status(200).json(createResponse(true, 'User account deleted successfully'));
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const handleFetchPublicUserProfile: RequestHandler = async (req, res, next) => {
+  const { friendlyId } = req.params; // Get the friendlyId from the URL
+  try {
+    const user = await getPublicUserProfileService(friendlyId); // Fetch public data
+    res.status(200).json(createResponse(true, user));
   } catch (error) {
     next(error);
   }
