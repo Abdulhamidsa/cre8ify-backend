@@ -10,3 +10,17 @@ export const addPostSchema = z
   });
 
 export type AddPostInput = z.infer<typeof addPostSchema>;
+export const fetchAllPostsSchema = z.object({
+  limit: z
+    .string()
+    .optional()
+    .refine((val) => !val || !isNaN(Number(val)), { message: 'Limit must be a number.' })
+    .transform((val) => (val ? Number(val) : undefined)),
+  page: z
+    .string()
+    .optional()
+    .refine((val) => !val || !isNaN(Number(val)), { message: 'Page must be a number.' })
+    .transform((val) => (val ? Number(val) : undefined)),
+});
+
+export type FetchAllPostsQuery = z.infer<typeof fetchAllPostsSchema>;

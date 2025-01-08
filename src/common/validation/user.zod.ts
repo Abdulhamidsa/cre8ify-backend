@@ -59,3 +59,8 @@ export const updateCredentialsSchema = z.object({
   email: z.string().email('Invalid email format').optional(),
   password: z.string().min(8, 'Password must be at least 8 characters long').optional(),
 });
+
+export const getAllUsersValidationSchema = z.object({
+  page: z.string().regex(/^\d+$/).optional(), // Must be a positive integer if provided
+  limit: z.string().regex(/^\d+$/).optional(), // Must be a positive integer if provided
+});
