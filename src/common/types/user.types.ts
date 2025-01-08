@@ -1,6 +1,3 @@
-// import mongoose from "mongoose";
-import mongoose from 'mongoose';
-
 import Links from '../data/constants/links.js';
 import Professions from '../data/constants/proffesions.js';
 
@@ -55,7 +52,6 @@ export type SigninInput = {
   password: string;
 };
 
-// signin response
 export type SignInResponse = {
   mongo_ref?: string;
   accessToken: string;

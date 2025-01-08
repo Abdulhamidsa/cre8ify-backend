@@ -1,8 +1,8 @@
 import { ErrorRequestHandler, NextFunction, Request, Response } from 'express';
 
-import { AppError } from '../errors/app.error';
-import { getErrorMessage } from '../utils/error.utils';
-import Logger from '../utils/logger';
+import { AppError } from '../errors/app.error.js';
+import { getErrorMessage } from '../utils/error.utils.js';
+import Logger from '../utils/logger.js';
 
 const expressErrorMiddleware: ErrorRequestHandler = (
   err: Error | AppError,

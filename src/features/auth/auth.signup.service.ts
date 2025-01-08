@@ -1,12 +1,12 @@
-import { getSQLClient } from '../../common/config/sql-client';
-import { AppError } from '../../common/errors/app.error';
-import { generateFriendlyId } from '../../common/utils/helper';
-import { generateMongoRef, hashPassword } from '../../common/utils/helpers';
-import Logger from '../../common/utils/logger';
-import { saveDocument } from '../../common/utils/mongo.service';
-import { SQL_QUERIES } from '../../common/utils/sql.constants';
-import { SignUpInput } from '../../common/validation/user.zod';
-import { User } from '../../models/user.model';
+import { getSQLClient } from '../../common/config/sql-client.js';
+import { AppError } from '../../common/errors/app.error.js';
+import { generateFriendlyId } from '../../common/utils/helper.js';
+import { generateMongoRef, hashPassword } from '../../common/utils/helpers.js';
+import Logger from '../../common/utils/logger.js';
+import { saveDocument } from '../../common/utils/mongo.service.js';
+import { SQL_QUERIES } from '../../common/utils/sql.constants.js';
+import { SignUpInput } from '../../common/validation/user.zod.js';
+import { User } from '../../models/user.model.js';
 
 export const signUpUserService = async (data: SignUpInput): Promise<void> => {
   const { email, password, username, age, bio, profilePicture, countryOrigin, profession, coverImage } = data;

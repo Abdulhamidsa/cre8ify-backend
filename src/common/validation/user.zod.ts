@@ -49,8 +49,10 @@ export const userResponeSchema = z.object({
   _id: z.string(),
   mongo_ref: z.string(),
   name: z.string().optional(),
-
+  username: z.string().optional(),
+  profilePicture: z.string().optional(),
   age: z.number(),
+  bio: z.string().optional(),
   createdAt: z.string(),
 });
 export type UserResponse = z.infer<typeof userResponeSchema>;

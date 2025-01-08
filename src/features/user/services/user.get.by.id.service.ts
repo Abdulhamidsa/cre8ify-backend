@@ -1,14 +1,11 @@
-import { AppError } from '../../../common/errors/app.error';
-import Logger from '../../../common/utils/logger';
-import { UserResponse } from '../../../common/validation/user.zod';
-import { User } from '../../../models/user.model';
+import { AppError } from '../../../common/errors/app.error.js';
+import Logger from '../../../common/utils/logger.js';
+import { UserResponse } from '../../../common/validation/user.zod.js';
+import { User } from '../../../models/user.model.js';
 
 export const getPublicUserProfileService = async (friendlyId: string): Promise<Partial<UserResponse>> => {
   try {
-    // Fetch user by friendlyId
-    const user = await User.findOne({ friendlyId })
-      .select('-__v -mongoRef -deletedAt -active') // Exclude private fields
-      .lean();
+    const user = await User.findOne({ friendlyId }).select('-__v -mongoRef -deletedAt -active').lean();
 
     if (!user) {
       throw new AppError('Public profile not found', 404);
@@ -16,8 +13,8 @@ export const getPublicUserProfileService = async (friendlyId: string): Promise<P
 
     return {
       username: user.username,
-      profilePicture: user.profilePicture || null,
-      bio: user.bio || '', // Include only public fields
+      profilePicture: user.profilePicture || '',
+      bio: user.bio || '',
       createdAt: user.createdAt.toISOString(),
     };
   } catch (error) {
