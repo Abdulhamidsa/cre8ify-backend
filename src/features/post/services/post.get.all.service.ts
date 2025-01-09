@@ -9,11 +9,9 @@ export const fetchAllPostsService = async (
   const query: Record<string, unknown> = {};
 
   try {
-    // Count the total number of posts matching the query
     const totalPosts = await Post.countDocuments(query);
     const totalPages = Math.ceil(totalPosts / limit);
 
-    // If no posts exist, return an empty response
     if (totalPosts === 0) {
       return {
         posts: [],
@@ -22,13 +20,11 @@ export const fetchAllPostsService = async (
       };
     }
 
-    // Pagination options
     const options = {
       limit,
       skip: (page - 1) * limit,
     };
 
-    // Fetch the posts
     const posts = await Post.find(query, null, options)
       .populate([
         { path: 'userId', select: '_id username profilePicture' },
@@ -36,12 +32,11 @@ export const fetchAllPostsService = async (
       ])
       .lean();
 
-    // Map posts with additional fields
     const mappedPosts = posts.map((post) => ({
       ...post,
       id: post._id.toString(),
-      likedByUser: post.likes.some((likeId) => likeId.toString() === userId),
-      likesCount: post.likes.length,
+      likedByUser: Array.isArray(post.likes) ? post.likes.some((likeId) => likeId.toString() === userId) : false,
+      likesCount: Array.isArray(post.likes) ? post.likes.length : 0,
     })) as unknown as PostType[];
 
     return {
@@ -50,7 +45,7 @@ export const fetchAllPostsService = async (
       currentPage: page,
     };
   } catch (error) {
-    console.error('Service Error:', error); // Log the actual error
+    console.error('Service Error:', error);
     throw new AppError('Failed to fetch posts', 500);
   }
 };
