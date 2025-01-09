@@ -49,8 +49,8 @@ export const fetchAllPostsService = async (
       totalPages,
       currentPage: page,
     };
-  } catch {
-    // Throw an error for unexpected issues
+  } catch (error) {
+    console.error('Service Error:', error); // Log the actual error
     throw new AppError('Failed to fetch posts', 500);
   }
 };
