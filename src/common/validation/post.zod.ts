@@ -12,15 +12,19 @@ export const addPostSchema = z
 export type AddPostInput = z.infer<typeof addPostSchema>;
 export const fetchAllPostsSchema = z.object({
   limit: z
-    .string()
+    .union([z.string(), z.number()])
     .optional()
-    .refine((val) => !val || !isNaN(Number(val)), { message: 'Limit must be a number.' })
-    .transform((val) => (val ? Number(val) : undefined)),
+    .transform((val) => (val !== undefined ? Number(val) : undefined)) // Transform to number if defined
+    .refine((val) => val === undefined || (Number.isInteger(val) && val > 0), {
+      message: 'Limit must be a positive integer.',
+    }),
   page: z
-    .string()
+    .union([z.string(), z.number()])
     .optional()
-    .refine((val) => !val || !isNaN(Number(val)), { message: 'Page must be a number.' })
-    .transform((val) => (val ? Number(val) : undefined)),
+    .transform((val) => (val !== undefined ? Number(val) : undefined)) // Transform to number if defined
+    .refine((val) => val === undefined || (Number.isInteger(val) && val > 0), {
+      message: 'Page must be a positive integer.',
+    }),
 });
 
 export type FetchAllPostsQuery = z.infer<typeof fetchAllPostsSchema>;

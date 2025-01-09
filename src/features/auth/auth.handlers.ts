@@ -63,7 +63,6 @@ export const signInHandler: RequestHandler = async (req, res, next): Promise<voi
 export const refreshTokenHandler: RequestHandler = async (req, res, next): Promise<void> => {
   try {
     const refreshToken = req.cookies?.refreshToken;
-    console.log('refreshToken', refreshToken);
     if (!refreshToken) {
       res.status(401).json(createResponse(false, { message: 'Refresh token is missing' }));
       return;

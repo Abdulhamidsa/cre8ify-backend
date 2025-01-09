@@ -3,42 +3,41 @@ import { Post } from '../../../common/models/post.model.js';
 import { PostType } from '../../../common/types/types.js';
 
 export const fetchAllPostsService = async (
-  { limit, page }: { limit?: number; page?: number },
+  { limit = 10, page = 1 }: { limit?: number; page?: number },
   userId: string,
-): Promise<PostType[]> => {
+): Promise<{ posts: PostType[]; totalPages: number; currentPage: number }> => {
+  const query: Record<string, unknown> = {};
+
   try {
-    const query = {};
+    const totalPosts = await Post.countDocuments(query);
+    const totalPages = Math.ceil(totalPosts / limit);
+
     const options = {
-      limit: limit || 10,
-      skip: page ? (page - 1) * (limit || 10) : 0,
+      limit,
+      skip: (page - 1) * limit,
     };
 
     const posts = await Post.find(query, null, options)
-      .populate<{
-        userId: { _id: string; username: string; profilePicture: string };
-        comments: Array<{
-          userId: { _id: string; username: string; profilePicture: string };
-        }>;
-      }>([
-        { path: 'userId', select: 'username profilePicture' },
-        { path: 'comments.userId', select: 'username profilePicture' },
+      .populate([
+        { path: 'userId', select: '_id username profilePicture' },
+        { path: 'comments.userId', select: '_id username profilePicture' },
       ])
       .lean();
 
-    if (!posts || posts.length === 0) {
-      throw new AppError('No posts found', 404);
-    }
-
-    return posts.map((post) => ({
+    const mappedPosts = posts.map((post) => ({
       ...post,
       id: post._id.toString(),
       likedByUser: post.likes.some((likeId) => likeId.toString() === userId),
       likesCount: post.likes.length,
-    })) as PostType[];
+    })) as unknown as PostType[];
+
+    return {
+      posts: mappedPosts,
+      totalPages,
+      currentPage: page,
+    };
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (error) {
-    if (error instanceof AppError) {
-      throw error;
-    }
     throw new AppError('Failed to fetch posts', 500);
   }
 };

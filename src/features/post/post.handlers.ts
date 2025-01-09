@@ -3,7 +3,7 @@ import { RequestHandler } from 'express';
 import { AppError } from '../../common/errors/app.error.js';
 import { Post } from '../../common/models/post.model.js';
 import { createResponse } from '../../common/utils/response.handler.js';
-import { FetchAllPostsQuery } from '../../common/validation/project.zod.js';
+import { fetchAllPostsSchema } from '../../common/validation/post.zod.js';
 import { addCommentSchema } from '../../models/comment.model.js';
 import { addPostService } from './services/post.add.service.js';
 import { fetchAllPostsService } from './services/post.get.all.service.js';
@@ -11,8 +11,6 @@ import { fetchAllPostsService } from './services/post.get.all.service.js';
 export const handleAddPost: RequestHandler = async (req, res, next) => {
   const mongoRef = res.locals.mongoRef;
   const validatedData = req.body;
-
-  console.log(validatedData);
 
   try {
     const post = await addPostService(mongoRef, validatedData);
@@ -23,10 +21,11 @@ export const handleAddPost: RequestHandler = async (req, res, next) => {
 };
 export const handleFetchAllPosts: RequestHandler = async (req, res, next) => {
   try {
-    const { limit, page } = req.query as FetchAllPostsQuery;
-    const userId = res.locals.userId.userId; // Adjust if your middleware sets res.locals differently
+    const { limit, page } = fetchAllPostsSchema.parse(req.query);
+    const userId = res.locals.userId.userId;
 
     const posts = await fetchAllPostsService({ limit, page }, userId);
+
     res.status(200).json(createResponse(true, posts));
   } catch (error) {
     next(error);
@@ -35,8 +34,7 @@ export const handleFetchAllPosts: RequestHandler = async (req, res, next) => {
 
 export const handleLikePost: RequestHandler = async (req, res, next) => {
   const { postId } = req.body;
-  const userId = res.locals.userId.userId; // Adjust if your middleware sets res.locals differently
-  console.log('Toggling like for postId:', postId, 'by userId:', userId);
+  const userId = res.locals.userId.userId;
 
   try {
     const post = await Post.findById(postId);
@@ -73,7 +71,7 @@ export const handleAddComment: RequestHandler = async (req, res, next) => {
     // Validate incoming data with Zod
     const { postId, text } = addCommentSchema.parse(req.body);
 
-    const userId = res.locals.userId.userId; // the ID from your auth middleware
+    const userId = res.locals.userId.userId;
 
     const post = await Post.findById(postId).populate({
       path: 'comments.userId',

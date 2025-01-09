@@ -57,8 +57,6 @@ export const signInUser = async (data: SignInInput): Promise<ApiResponse<SignInR
 
     friendlyId = mongoUser.friendlyId;
     userId = mongoUser._id.toString();
-    console.log('MongoDB _id:', mongoUser._id);
-    console.log('User ID as string:', userId);
 
     const { accessToken, refreshToken } = await generateTokens(mongoRef, friendlyId, userId);
 

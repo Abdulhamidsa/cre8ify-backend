@@ -28,6 +28,7 @@ export interface PopulatedPostDocument extends PostBase, Document {
     profilePicture: string;
   };
   comments: Array<{
+    _id: string;
     userId: { _id: string; username: string; profilePicture: string };
     text: string;
     createdAt: Date;
