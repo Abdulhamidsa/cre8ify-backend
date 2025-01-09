@@ -9,14 +9,26 @@ export const fetchAllPostsService = async (
   const query: Record<string, unknown> = {};
 
   try {
+    // Count the total number of posts matching the query
     const totalPosts = await Post.countDocuments(query);
     const totalPages = Math.ceil(totalPosts / limit);
 
+    // If no posts exist, return an empty response
+    if (totalPosts === 0) {
+      return {
+        posts: [],
+        totalPages: 0,
+        currentPage: 1,
+      };
+    }
+
+    // Pagination options
     const options = {
       limit,
       skip: (page - 1) * limit,
     };
 
+    // Fetch the posts
     const posts = await Post.find(query, null, options)
       .populate([
         { path: 'userId', select: '_id username profilePicture' },
@@ -24,6 +36,7 @@ export const fetchAllPostsService = async (
       ])
       .lean();
 
+    // Map posts with additional fields
     const mappedPosts = posts.map((post) => ({
       ...post,
       id: post._id.toString(),
@@ -36,8 +49,8 @@ export const fetchAllPostsService = async (
       totalPages,
       currentPage: page,
     };
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  } catch (error) {
+  } catch {
+    // Throw an error for unexpected issues
     throw new AppError('Failed to fetch posts', 500);
   }
 };

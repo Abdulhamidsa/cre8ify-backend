@@ -24,9 +24,9 @@ export const handleFetchAllPosts: RequestHandler = async (req, res, next) => {
     const { limit, page } = fetchAllPostsSchema.parse(req.query);
     const userId = res.locals.userId.userId;
 
-    const posts = await fetchAllPostsService({ limit, page }, userId);
+    const postsData = await fetchAllPostsService({ limit, page }, userId);
 
-    res.status(200).json(createResponse(true, posts));
+    res.status(200).json(createResponse(true, postsData));
   } catch (error) {
     next(error);
   }
