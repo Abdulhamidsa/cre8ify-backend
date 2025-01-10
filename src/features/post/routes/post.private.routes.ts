@@ -10,7 +10,7 @@ const router = Router();
 // add post
 router.post('/post', ValidZod(addPostSchema, 'body'), handleAddPost);
 // all posts
-router.get('/post', ValidZod(fetchAllPostsSchema, 'query'), handleFetchAllPosts);
+router.get('/posts', ValidZod(fetchAllPostsSchema, 'query'), handleFetchAllPosts);
 
 router.post('/post/like', handleLikePost);
 router.post('/post/comment', handleAddComment);

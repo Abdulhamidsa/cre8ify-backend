@@ -9,7 +9,17 @@ import { SignUpInput } from '../../common/validation/user.zod.js';
 import { User } from '../../models/user.model.js';
 
 export const signUpUserService = async (data: SignUpInput): Promise<void> => {
-  const { email, password, username, age, bio, profilePicture, countryOrigin, profession, coverImage } = data;
+  const {
+    email,
+    password,
+    username,
+    age = null, // Optional: Use null for `age` if not provided
+    bio = '', // Default to an empty string if not provided
+    profilePicture = '',
+    countryOrigin = '',
+    profession = '',
+    coverImage = '',
+  } = data;
   const sqlClient = await getSQLClient();
 
   try {
@@ -49,7 +59,6 @@ export const signUpUserService = async (data: SignUpInput): Promise<void> => {
     }
 
     await sqlClient.query('COMMIT');
-    Logger.info(`User successfully created with mongo_ref: ${mongoRef}`);
   } catch (error) {
     await sqlClient.query('ROLLBACK');
     Logger.error('Error during user signup', error);

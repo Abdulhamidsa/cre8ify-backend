@@ -6,7 +6,8 @@ import { User } from '../../../models/user.model.js';
 export const deleteProjectService = async (mongoRef: string, projectId: string) => {
   try {
     // Check if the user exists based on mongoRef
-    const user = await User.findOne({ mongo_ref: mongoRef }).lean();
+    const user = await User.findOne({ mongoRef: mongoRef }).lean();
+    console.log(user);
     if (!user) {
       throw new AppError('User not found', 404); // Specific error for user not found
     }

@@ -65,10 +65,12 @@ const postSchema: Schema<PostDocument> = new Schema(
     },
     content: {
       type: String,
-      trim: true,
+      trim: false,
     },
     image: {
       type: String,
+      trim: true,
+      required: false,
     },
     likes: [
       {

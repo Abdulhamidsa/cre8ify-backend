@@ -2,8 +2,7 @@ import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import express, { Request, Response } from 'express';
-
-// import { rateLimit } from 'express-rate-limit';
+import { rateLimit } from 'express-rate-limit';
 
 import { SECRETS } from './common/config/config.js';
 import { corsOptions } from './common/config/cors.js';
@@ -17,17 +16,17 @@ const PORT = SECRETS.port;
 app.set('trust proxy', 1);
 
 // Rate limiter middleware
-// const limiter = rateLimit({
-//   windowMs: 60 * 1000, // 1 minute
-//   max: 100, // Limit each IP to 100 requests per `window`
-//   standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
-//   legacyHeaders: false, // Disable the `X-RateLimit-*` headers
-// });
+const limiter = rateLimit({
+  windowMs: 60 * 1000, // 1 minute
+  max: 100, // Limit each IP to 100 requests per `window`
+  standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
+  legacyHeaders: false, // Disable the `X-RateLimit-*` headers
+});
 
 // Middlewares
 app.use(cookieParser());
 app.use(bodyParser.json());
-// app.use(limiter);
+app.use(limiter);
 app.use(express.json());
 app.use(cors(corsOptions));
 // Routes

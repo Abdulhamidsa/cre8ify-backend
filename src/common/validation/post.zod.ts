@@ -3,10 +3,18 @@ import { z } from 'zod';
 export const addPostSchema = z
   .object({
     content: z.string().optional(), // Optional text content
-    image: z.string().url('Invalid URL for image.').optional(), // Optional single image
+
+    image: z
+      .union([
+        z.string().url('Invalid URL for image.'), // Valid URL
+        z.literal(''), // Accept empty string
+      ])
+      .optional()
+      .transform((val) => (val === '' ? undefined : val)), // Convert "" to undefined
   })
   .refine((data) => data.content || data.image, {
     message: 'At least one of "content" or "image" is required.',
+    path: ['content'], // Points the error to the content field
   });
 
 export type AddPostInput = z.infer<typeof addPostSchema>;

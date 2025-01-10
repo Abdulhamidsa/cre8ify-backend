@@ -31,10 +31,8 @@ const projectSchema: Schema<ProjectDocument> = new Schema(
       required: true,
       trim: true,
     },
-    url: {
-      type: String,
-      required: true,
-    },
+    url: { type: String, required: false },
+
     media: [
       {
         url: {

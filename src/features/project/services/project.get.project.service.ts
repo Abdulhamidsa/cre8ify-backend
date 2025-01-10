@@ -42,13 +42,9 @@ export const getUserProjectsService = async (mongoRef: string): Promise<FetchedP
           createdAt: project.createdAt,
           updatedAt: project.updatedAt,
         };
-
-        // Validate the transformed project using Zod
         return fetchedProjectSchema.parse(transformedProject);
       }),
     );
-
-    // 4. Return the validated projects
     return transformedProjects;
   } catch (error) {
     Logger.error(`Error fetching projects for mongoRef ${mongoRef}:`, error);

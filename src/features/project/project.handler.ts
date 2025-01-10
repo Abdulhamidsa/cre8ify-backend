@@ -52,6 +52,7 @@ export const handleDeleteProject: RequestHandler = async (req, res, next) => {
   try {
     const mongoRef = res.locals.mongoRef;
     const projectId = req.params.id;
+
     await deleteProjectService(mongoRef, projectId);
     res.status(200).json(createResponse(true, 'Project deleted successfully'));
   } catch (error) {

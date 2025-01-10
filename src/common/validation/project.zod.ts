@@ -4,7 +4,7 @@ export const fetchedProjectSchema = z.object({
   id: z.string().optional(),
   title: z.string().min(1, 'Title is required.'),
   description: z.string().min(1, 'Description is required.'),
-  url: z.string().url('Invalid URL format.'),
+  url: z.union([z.string().url(), z.literal('')]).optional(),
   media: z
     .array(
       z.object({
@@ -31,7 +31,7 @@ export const fetchProjectWithUser = z.object({
   id: z.string(),
   title: z.string(),
   description: z.string(),
-  url: z.string().url(),
+  url: z.union([z.string().url(), z.literal('')]).optional(),
   thumbnail: z.string().url(),
   media: z.array(z.object({ url: z.string().url() })),
   tags: z.array(z.object({ id: z.string(), name: z.string() })),
@@ -65,7 +65,7 @@ export type FetchedProjectQueryType = z.infer<typeof fetchedProjectQuerySchema>;
 export const addProjectSchema = z.object({
   title: z.string().nonempty('Title is required.'),
   description: z.string().nonempty('Description is required.'),
-  url: z.string().url('Invalid URL for projectUrl.'),
+  url: z.union([z.string().url('Invalid URL format.'), z.literal('')]).optional(),
   media: z
     .array(
       z.object({
@@ -88,7 +88,7 @@ export const getProjectValidationSchema = z.object({
 export const editProjectValidationSchema = z.object({
   title: z.string().optional(),
   description: z.string().optional(),
-  url: z.string().url('Invalid URL for projectUrl').optional(),
+  url: z.union([z.string().url('Invalid URL format.'), z.literal('')]).optional(),
   media: z
     .array(
       z.object({
