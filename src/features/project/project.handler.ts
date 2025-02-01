@@ -60,17 +60,6 @@ export const handleDeleteProject: RequestHandler = async (req, res, next) => {
   }
 };
 
-// fetch all projects
-// export const handleGetAllProjects: RequestHandler = async (req, res, next) => {
-//   try {
-//     const { limit, page } = req.query as FetchedProjectQueryType; // Validated query parameters
-//     const projects = await getAllProjectsService({ limit, page });
-//     res.status(200).json(createResponse(true, projects));
-//   } catch (error) {
-//     next(error); // Pass error to middleware
-//   }
-// };
-
 export const handleGetAllProjects: RequestHandler = async (req, res, next) => {
   try {
     const page = parseInt(req.query.page as string, 10) || 1;

@@ -4,9 +4,9 @@ import cors from 'cors';
 import express, { Request, Response } from 'express';
 import { rateLimit } from 'express-rate-limit';
 
-import { SECRETS } from './common/config/config.js';
 import { corsOptions } from './common/config/cors.js';
 import { connectMongoDB } from './common/config/mongo.connection.js';
+import { SECRETS } from './common/config/secrets.js';
 import expressErrorMiddleware from './common/middleware/error.middleware.js';
 import Logger from './common/utils/logger.js';
 import routes from './routes/index.js';

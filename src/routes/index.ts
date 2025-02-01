@@ -24,3 +24,7 @@ router.use(userPrivateRoutes);
 router.use(postPrivateRoutes);
 
 export default router;
+
+
+
+
